@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<main class="post-detail-page">
+    <div class="post">
+        {% load static %}
+        <img src="{% static 'images/post_image.jpg' %}" alt="Post Image">
+        <h2>Post Title</h2>
+        <p>This is the content of the post.</p>
+    </div>
+    <div class="comments">
+        <!-- Здесь могут быть комментарии к посту -->
+    </div>
+</main>
+{% endblock %}

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DjangoGram</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+
+<body>
+
+<header>
+    <div class="logo">DjangoGram</div>
+    <div class="search">
+        <input type="text" placeholder="Search">
+    </div>
+</header>
+
+<main>
+    <!-- Здесь будет основной контент страницы -->
+    {% block content %}
+    {% endblock %}
+</main>
+
+<footer>
+    <div class="nav">
+        <a href="{% url 'index' %}">Home</a>
+        <a href="#">Explore</a>
+        <a href="{% url 'user_profile' %}"> Profile </a>
+        <a href="{% url 'post_create' %}">Create Post</a>
+    </div>
+</footer>
+<!-- Здесь подключение к скриптам JavaScript -->
+</body>
+</html>
+

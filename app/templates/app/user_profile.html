@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<main class="profile-page">
+    <div class="profile-info">
+        <div class="profile-avatar">
+            {% load static %}
+            <img src="{% static 'images/avatar.jpg' %}" alt="Profile Image">
+        </div>
+        <div class="profile-details">
+            <h1>User Name</h1>
+            <p>Bio: This is a short bio about the user.</p>
+        </div>
+    </div>
+    <div class="profile-posts">
+        <!-- Здесь могут быть ваши посты пользователя -->
+    </div>
+</main>
+{% endblock %}

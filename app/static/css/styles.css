@@ -1,0 +1,57 @@
+/* styles.css */
+
+/* Обнуляем стили по умолчанию для body */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f7f7f7;
+}
+
+/* Стили для header */
+header {
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.search input {
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 200px;
+}
+
+.profile img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+/* Стили для основного контента */
+main {
+    padding: 20px;
+}
+
+/* Стили для навигации в футере */
+footer {
+    background-color: #fff;
+    border-top: 1px solid #ddd;
+    padding: 10px 20px;
+}
+
+.nav a {
+    margin-right: 20px;
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+}
