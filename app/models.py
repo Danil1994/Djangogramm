@@ -1,7 +1,7 @@
+import uuid  # Required for unique id
+
 from django.db import models
 from django.urls import reverse
-
-import uuid  # Required for unique id
 
 
 class Post(models.Model):
@@ -68,6 +68,7 @@ class Comment(models.Model):
         Returns the post`s url.
         """
         return reverse('comment-detail', args=[str(self.id)])
+
 
 class Like(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, help_text="Unique ID")
