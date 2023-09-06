@@ -3,11 +3,13 @@
 {% block content %}
 <main class="post-detail-page">
     <div class="post">
-        {% load static %}
-        <img src="{% static 'images/post_image.jpg' %}" alt="Post Image">
-        <h2>Post Title</h2>
-        <p>This is the content of the post.</p>
+        <a>POST DETAIL page. Shows all detail about post.
+        Name, Photos, Text, Tag and last 3 comments
+        Each tag its hyperlink to same topic. Author its also hyperlink to users profile </a>
+        <h2>{{ post.title }}</h2>
+        <p>{{post.summary}}</p>
     </div>
+
     <div class="comments">
         <!-- Здесь могут быть комментарии к посту -->
     </div>
