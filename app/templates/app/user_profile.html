@@ -8,7 +8,7 @@
             <img src="{% static 'images/avatar.jpg' %}" alt="Profile Image">
         </div>
         <div class="profile-details">
-            <h1>User Name</h1>
+            <h1>User {{user.get_username}}</h1>
             <p>Bio: This is a short bio about the user.</p>
         </div>
     </div>
