@@ -13,6 +13,18 @@
 
 <header>
     <div class="logo">DjangoGram</div>
+    <div class="nav">
+        <a href="{% url 'index' %}">Home</a>
+        <a href="{% url 'explore' %}">Explore</a>
+        <a href="{% url 'user_profile' %}"> Profile </a>
+        <a href="{% url 'post_create' %}">Create Post</a>
+    </div>
+    {% if user.is_authenticated %}
+    User: {{ user.get_username }}
+    <a href="{% url 'logout'%}?next={{request.path}}">Logout</a>
+    {% else %}
+    <a href="{% url 'login'%}?next={{request.path}}">Login</a>
+    {% endif %}
     <div class="search">
         <input type="text" placeholder="Search">
     </div>
@@ -24,14 +36,6 @@
     {% endblock %}
 </main>
 
-<footer>
-    <div class="nav">
-        <a href="{% url 'index' %}">Home</a>
-        <a href="{% url 'explore' %}">Explore</a>
-        <a href="{% url 'user_profile' %}"> Profile </a>
-        <a href="{% url 'post_create' %}">Create Post</a>
-    </div>
-</footer>
 <!-- Здесь подключение к скриптам JavaScript -->
 </body>
 </html>
