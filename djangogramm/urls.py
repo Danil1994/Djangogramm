@@ -25,17 +25,16 @@ urlpatterns = [
 ]
 
 urlpatterns += [
-    path('app/', include('app.urls')),
-
+    path('main_app/', include('main_app.urls')),
 ]
 
 urlpatterns += [
-    path('', RedirectView.as_view(url='/app/', permanent=True)),
+    path('', RedirectView.as_view(url='/main_app/', permanent=True)),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-#Add Django site authentication urls (for login, logout, password management)
 urlpatterns += [
     path('accounts/', include('django.contrib.auth.urls')),
 ]

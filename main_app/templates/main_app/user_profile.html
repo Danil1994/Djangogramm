@@ -2,16 +2,19 @@
 
 {% block content %}
 <main class="profile-page">
+    {% load static %}
     <div class="profile-info">
         <div class="profile-avatar">
-            {% load static %}
-            <img src="{% static 'images/avatar.jpg' %}" alt="Profile Image">
+            <img src="{{ user.avatar.url }}" alt="User Avatar" width="300" height="200">
         </div>
         <div class="profile-details">
-            <h1>User {{user.get_username}}</h1>
-            <p>Bio: This is a short bio about the user.</p>
+            <h1>User {{ user.get_username }}</h1>
+            <p>Bio: {{ user.bio }}</p>
+            <a href="{% url 'edit_profile' %}">edit profile</a>
         </div>
+
     </div>
+
     <div class="profile-posts">
         <!-- Здесь могут быть ваши посты пользователя -->
     </div>
