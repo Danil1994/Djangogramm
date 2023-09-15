@@ -3,11 +3,14 @@
 {% block content %}
 <main class="post-detail-page">
     <div class="post">
-        <a>POST DETAIL page. Shows all detail about post.
-        Name, Photos, Text, Tag and last 3 comments
-        Each tag its hyperlink to same topic. Author its also hyperlink to users profile </a>
-        <h2>{{ post.title }}</h2>
-        <p>{{post.summary}}</p>
+
+        <h2>title {{ post.name }}</h2>
+        {% for photo in photos %}
+        <img src="{{ photo.image.url }}" alt="Photo" width="300" height="200">
+        {% endfor %}
+        <p>author {{ post.author }} {{post.publish_date}}</p>
+        <p>summary {{ post.summary }}</p>
+        <p> tags {{ post.tag }}</p>
     </div>
 
     <div class="comments">

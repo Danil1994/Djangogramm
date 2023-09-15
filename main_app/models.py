@@ -1,13 +1,16 @@
+from datetime import datetime
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.urls import reverse
 
 
 class Photo(models.Model):
-    image = models.ImageField(upload_to='photo', blank=True, null=True)
+    image = models.ImageField(upload_to='photos/', blank=True, null=True)
+    post = models.ForeignKey('Post', on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
-        return self.pk
+        return str(self.pk)
 
 
 class Tag(models.Model):
@@ -26,11 +29,11 @@ class CustomUser(AbstractUser):
 
 
 class Post(models.Model):
-    user_id = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)
     name = models.CharField(max_length=40)
     summary = models.TextField(max_length=1000, help_text="Enter description of the post")
-    tag = models.ManyToManyField('Tag')
-    photos = models.ManyToManyField('Photo', related_name='posts', blank=True)
+    author = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)
+    tag = models.ManyToManyField(Tag, blank=True)
+    publish_date = models.DateField('pubdate', default=datetime.today(), auto_now_add=False)
 
     def __str__(self):
         return self.name
@@ -39,7 +42,7 @@ class Post(models.Model):
         """
         Returns the post`s url.
         """
-        return reverse('post-detail', args=[str(self.pk)])
+        return reverse('post_detail', args=[str(self.pk)])
 
 
 class Comment(models.Model):
