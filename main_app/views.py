@@ -1,10 +1,10 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect, render
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
 
 from .forms import (CustomUserChangeForm, CustomUserCreationForm, PhotoForm,
-                    PostForm)
+                    PostForm, PhotoFormSet)
 from .models import Comment, CustomUser, Like, Photo, Post, Tag
 
 
@@ -29,28 +29,32 @@ def post_detail(request, pk):
     return render(request, 'main_app/post_detail.html', {'post': post, 'photos': photos})
 
 
-@login_required()
+@login_required
 def create_post(request):
     if request.method == 'POST':
         post_form = PostForm(request.POST)
-        photo_form = PhotoForm(request.POST, request.FILES)  # request.FILES для обработки загрузки файлов
+        photo_formset = PhotoFormSet(request.POST, request.FILES, queryset=Photo.objects.none())
 
-        if post_form.is_valid() and photo_form.is_valid():
+        if post_form.is_valid() and photo_formset.is_valid():
             post = post_form.save(commit=False)
             post.author = request.user
             post.save()
 
-            photo = photo_form.save(commit=False)
-            photo.post = post  # Привязываем фото к посту
-            photo.save()
+            for photo_form in photo_formset:
+                if photo_form.cleaned_data.get('image'):
+                    photo = photo_form.save(commit=False)
+                    photo.post = post
+                    photo.save()
 
             return redirect('post_detail', pk=post.pk)
 
     else:
         post_form = PostForm()
-        photo_form = PhotoForm()
+        photo_formset = PhotoFormSet(queryset=Photo.objects.none())
 
-    return render(request, 'main_app/create_post.html', {'post_form': post_form, 'photo_form': photo_form})
+    return render(request, 'main_app/create_post.html',
+                  {'post_form': post_form, 'photo_formset': photo_formset}
+                  )
 
 
 class SignUpView(CreateView):

@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
+from django.forms import modelformset_factory
 
 from .models import CustomUser, Photo, Post
 
@@ -8,6 +9,9 @@ class PhotoForm(forms.ModelForm):
     class Meta:
         model = Photo
         fields = ['image']
+
+
+PhotoFormSet = modelformset_factory(Photo, form=PhotoForm, extra=5)
 
 
 class PostForm(forms.ModelForm):

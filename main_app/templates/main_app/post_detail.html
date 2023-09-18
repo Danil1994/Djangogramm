@@ -5,9 +5,10 @@
     <div class="post">
 
         <h2>title {{ post.name }}</h2>
-        {% for photo in photos %}
+         {% for photo in photos %}
         <img src="{{ photo.image.url }}" alt="Photo" width="300" height="200">
         {% endfor %}
+
         <p>author {{ post.author }} {{post.publish_date}}</p>
         <p>summary {{ post.summary }}</p>
         <p> tags {{ post.tag }}</p>
