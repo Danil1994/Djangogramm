@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from django.forms import modelformset_factory
 
-from .models import CustomUser, Photo, Post
+from .models import Comment, CustomUser, Photo, Post, Tag
 
 
 class PhotoForm(forms.ModelForm):
@@ -17,7 +17,7 @@ PhotoFormSet = modelformset_factory(Photo, form=PhotoForm, extra=5)
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ['name', 'summary', 'tag', ]
+        fields = ['name', 'summary', ]
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -30,3 +30,15 @@ class CustomUserChangeForm(UserChangeForm):
     class Meta:
         model = CustomUser
         fields = ("username", "email", "bio", "avatar")
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ('text',)
+
+
+class TagForm(forms.ModelForm):
+    class Meta:
+        model = Tag
+        fields = ('tag',)

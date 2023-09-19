@@ -14,10 +14,10 @@ class Photo(models.Model):
 
 
 class Tag(models.Model):
-    name = models.CharField(max_length=50, primary_key=True)
+    tag = models.CharField(max_length=50, primary_key=True, help_text="Enter tags separated by commas")
 
     def __str__(self):
-        return self.name
+        return self.tag
 
 
 class CustomUser(AbstractUser):
@@ -46,26 +46,17 @@ class Post(models.Model):
 
 
 class Comment(models.Model):
-    post_id = models.ForeignKey(Post, on_delete=models.CASCADE)
-    user_id = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)
     text = models.TextField(max_length=1000)
 
     def __str__(self):
-        return self.text
-
-    def get_absolute_url(self):
-        """
-        Returns the comment`s url.
-        """
-        return reverse('comment-detail', args=[str(self.pk)])
+        return self.text[:75]
 
 
 class Like(models.Model):
-    post_id = models.ForeignKey(Post, on_delete=models.CASCADE)
-    user_id = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)
 
-    def get_absolute_url(self):
-        """
-        Returns the like`s url.
-        """
-        return reverse('comment-detail', args=[str(self.pk)])
+    def __str__(self):
+        return f"Like by {self.user.username} on {self.post.name}"

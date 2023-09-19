@@ -4,11 +4,15 @@
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ post_form.as_p }}
+
+    {{ tag_form.tag.label_tag }}
+    {{ tag_form.tag }}
+
     {{ photo_formset.management_form }}
         {% for photo_form in photo_formset %}
           {{ photo_form.as_p }}
         {% endfor %}
-    <!--{{ photo_form.as_p }} -->
+
     <button type="submit">Create Post</button>
 </form>
 

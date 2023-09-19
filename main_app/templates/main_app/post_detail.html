@@ -5,17 +5,47 @@
     <div class="post">
 
         <h2>title {{ post.name }}</h2>
-         {% for photo in photos %}
+        {% for photo in photos %}
         <img src="{{ photo.image.url }}" alt="Photo" width="300" height="200">
         {% endfor %}
 
         <p>author {{ post.author }} {{post.publish_date}}</p>
         <p>summary {{ post.summary }}</p>
-        <p> tags {{ post.tag }}</p>
+        <p> tags: {% for tag in tags %}
+            {{ tag.tag }},
+            {% endfor %}</p>
+    </div>
+
+    <div class="like-button">
+        <form method="post" action="{% url 'add_like_to_post' post_pk=post.pk %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">
+                {% if like %}Unlike{% else %}Like{% endif %}
+            </button>
+        </form>
+    </div>
+
+
+    <div class="likes-count">
+        {{ post.like_set.count }} likes
     </div>
 
     <div class="comments">
-        <!-- Здесь могут быть комментарии к посту -->
+        <form method="post" action="{% url 'add_comment_to_post' post.pk %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Добавить комментарий</button>
+        </form>
+
+        <!-- Отображение существующих комментариев -->
+        {% for comment in post.comment_set.all %}
+        <p>{{ comment.author.username }} написал(а) {{ comment.created_date }}:</p>
+        <p>{{ comment.text }}</p>
+        {% empty %}
+        <p>Комментариев пока нет.</p>
+        {% endfor %}
+
     </div>
+
 </main>
 {% endblock %}

@@ -3,7 +3,6 @@
 {% block content %}
 <p>Главная страница</p>
 <a>Posts</a>
-<a>Im main page, I show last 10 posts  each post its hyperlink to the datail post page.</a>
 {% for post in posts_list %}
 <li>
     <a href="{{ post.get_absolute_url }}">{{post.name}}</a>
