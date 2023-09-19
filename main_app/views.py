@@ -1,13 +1,18 @@
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
-from django.views.generic.edit import CreateView
+from django.views.generic import ListView
+from django.views.generic.edit import CreateView, UpdateView
+
+from django.shortcuts import render
 
 from .forms import (CommentForm, CustomUserChangeForm, CustomUserCreationForm,
                     PhotoForm, PhotoFormSet, PostForm, TagForm)
 from .models import Comment, CustomUser, Like, Photo, Post, Tag
 
 
+###  GET
 def index(request):
     posts_list = Post.objects.all()
     return render(request, 'index.html', context={'posts_list': posts_list})
@@ -22,6 +27,21 @@ def explore(request):
     return render(request, 'main_app/explore.html')
 
 
+class SearchResultsView(ListView):
+    model = Post  # Используем модель Post
+    template_name = 'main_app/search_results.html'
+
+    def get_queryset(self):  # новый
+
+        query = self.request.GET.get('q')
+        if query:
+            return Post.objects.filter(
+                Q(name__icontains=query) | Q(tag__tag__icontains=query)
+            )
+        else:
+            return Post.objects.none()
+
+
 @login_required()
 def post_detail(request, pk):
     post = Post.objects.get(pk=pk)
@@ -31,7 +51,7 @@ def post_detail(request, pk):
 
     return render(request, 'main_app/post_detail.html', {'post': post, 'photos': photos, 'like': like, 'tags': tags})
 
-
+### POST ###
 @login_required
 def create_post(request):
     if request.method == 'POST':
@@ -69,29 +89,19 @@ def create_post(request):
                    'tag_form': tag_form}
                   )
 
-
-def posts_by_tag(request, tag_name):
-    tag = get_object_or_404(Tag, name=tag_name)
-    posts = Post.objects.filter(tag=tag)
-
-    return render(request, 'main_app/posts_by_tag.html', {'tag': tag, 'posts': posts})
-
-
 class SignUpView(CreateView):
     form_class = CustomUserCreationForm
     success_url = reverse_lazy("login")
     template_name = "registration/signup.html"
 
-
-class EditProfile(CreateView):
+class EditProfile(UpdateView):
+    model = CustomUser
     form_class = CustomUserChangeForm
     success_url = reverse_lazy("user_profile")
     template_name = "registration/edit_profile.html"
 
-    def get_form_kwargs(self):  # получаем имя юзера и сохраняем как автора
-        kwargs = super().get_form_kwargs()
-        kwargs['instance'] = self.request.user
-        return kwargs
+    def get_object(self, queryset=None):
+        return self.request.user
 
 
 @login_required
@@ -103,7 +113,7 @@ def add_comment_to_post(request, post_pk):
         if form.is_valid():
             comment = form.save(commit=False)
             comment.author = request.user
-            comment.post_id = post
+            comment.post_id = post.pk
             comment.save()
             return redirect('post_detail', pk=post.pk)
     else:

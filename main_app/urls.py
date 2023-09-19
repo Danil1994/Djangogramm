@@ -14,5 +14,6 @@ urlpatterns = [
     path('post/create/', views.create_post, name='post_create'),
     re_path(r'^post/(?P<post_pk>[0-9]+)/comment/$', views.add_comment_to_post, name='add_comment_to_post'),
     path('post/<int:post_pk>/like/', views.add_like_to_post, name='add_like_to_post'),
+    path('search/', views.SearchResultsView.as_view(), name='search_view'),
 
 ]
