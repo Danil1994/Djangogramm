@@ -5,14 +5,12 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView
 
-from django.shortcuts import render
-
 from .forms import (CommentForm, CustomUserChangeForm, CustomUserCreationForm,
                     PhotoForm, PhotoFormSet, PostForm, TagForm)
 from .models import Comment, CustomUser, Like, Photo, Post, Tag
 
 
-###  GET
+###  GET ###
 def index(request):
     posts_list = Post.objects.all()
     return render(request, 'index.html', context={'posts_list': posts_list})
@@ -50,6 +48,7 @@ def post_detail(request, pk):
     tags = post.tag.all()
 
     return render(request, 'main_app/post_detail.html', {'post': post, 'photos': photos, 'like': like, 'tags': tags})
+
 
 ### POST ###
 @login_required
@@ -89,10 +88,12 @@ def create_post(request):
                    'tag_form': tag_form}
                   )
 
+
 class SignUpView(CreateView):
     form_class = CustomUserCreationForm
     success_url = reverse_lazy("login")
     template_name = "registration/signup.html"
+
 
 class EditProfile(UpdateView):
     model = CustomUser

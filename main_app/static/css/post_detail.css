@@ -1,0 +1,15 @@
+/* Импорт текущего файла CSS */
+@import url('base.css');
+
+
+.comment-frame {
+    border: 2px solid #ccc; /* Увеличиваем ширину рамки до 2 пикселей */
+    padding: 10px;
+    margin-bottom: 10px;
+    overflow: auto;
+    float: left; /* Выравнивание элемента слева */
+}
+
+.comment-date {
+    float: right; /* Выравнивание текста справа */
+}

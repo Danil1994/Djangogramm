@@ -6,12 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DjangoGram</title>
     {% load static %}
-
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 
-<body>
 
+<body>
 <header>
     <div class="logo">DjangoGram</div>
     <div class="nav">
@@ -32,10 +31,9 @@
             <input name="q" type="text" placeholder="Search...">
         </form>
 
-
 </header>
 
-<main>
+<main class="container">
     <!-- Здесь будет основной контент страницы -->
     {% block content %}
     {% endblock %}

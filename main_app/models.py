@@ -49,6 +49,7 @@ class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     user = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)
     text = models.TextField(max_length=1000)
+    publish_date = models.DateField('pubdate', default=datetime.today(), auto_now_add=False)
 
     def __str__(self):
         return self.text[:75]
