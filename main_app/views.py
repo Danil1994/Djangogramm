@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import ListView
@@ -11,25 +12,25 @@ from .models import Comment, CustomUser, Like, Photo, Post, Tag
 
 
 ###  GET ###
-def index(request):
-    posts_list = Post.objects.all()
+def index(request: HttpRequest) -> HttpResponse:
+    posts_list = Post.objects.all().order_by('publish_date')
     return render(request, 'index.html', context={'posts_list': posts_list})
 
 
-@login_required()
-def user_profile(request):
+@login_required
+def user_profile(request: HttpRequest) -> HttpResponse:
     return render(request, 'main_app/user_profile.html')
 
 
-def explore(request):
+def explore(request: HttpRequest) -> HttpResponse:
     return render(request, 'main_app/explore.html')
 
 
 class SearchResultsView(ListView):
-    model = Post  # Используем модель Post
+    model = Post
     template_name = 'main_app/search_results.html'
 
-    def get_queryset(self):  # новый
+    def get_queryset(self):
 
         query = self.request.GET.get('q')
         if query:
@@ -41,7 +42,7 @@ class SearchResultsView(ListView):
 
 
 @login_required()
-def post_detail(request, pk):
+def post_detail(request: HttpRequest, pk: int) -> HttpResponse:
     post = Post.objects.get(pk=pk)
     photos = post.photo_set.all()  # Получаем все фотографии, связанные с этим постом
     like = Like.objects.filter(post=post, user=request.user).first()
@@ -56,7 +57,7 @@ def create_post(request):
     if request.method == 'POST':
         post_form = PostForm(request.POST)
         photo_formset = PhotoFormSet(request.POST, request.FILES, queryset=Photo.objects.none())
-        tag_form = TagForm(request.POST)  # Создайте форму для тегов
+        tag_form = TagForm(request.POST)
 
         if post_form.is_valid() and photo_formset.is_valid() and tag_form.is_valid():
             post = post_form.save(commit=False)
@@ -106,7 +107,7 @@ class EditProfile(UpdateView):
 
 
 @login_required
-def add_comment_to_post(request, post_pk):
+def add_comment_to_post(request: HttpRequest, post_pk: int) -> HttpResponse:
     post = get_object_or_404(Post, pk=post_pk)
 
     if request.method == 'POST':
@@ -124,7 +125,7 @@ def add_comment_to_post(request, post_pk):
 
 
 @login_required
-def add_like_to_post(request, post_pk):
+def add_like_to_post(request: HttpResponse, post_pk: int) -> HttpResponse:
     post = Post.objects.get(pk=post_pk)
 
     if request.method == 'POST':

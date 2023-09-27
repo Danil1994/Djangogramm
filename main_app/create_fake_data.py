@@ -1,12 +1,15 @@
 import os
 import random
 import django
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "djangogramm.settings")
+django.setup()
+
 
 from faker import Faker
 from main_app.models import Comment, CustomUser, Like, Photo, Post, Tag
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "djangogramm.settings")
-django.setup()
+
+
 fake = Faker()
 
 
@@ -52,19 +55,19 @@ def create_fake_photos():
     for post in posts:
 
         for _ in range(random.randint(1, 5)):
-            # Создайте фейковую фотографию
+            # создать фейковую фотографию
             fake_photo = Photo()
 
-            # Выберите случайный файл из списка фотографий
+            # берем случайный файл из списка фотографий
             random_photo_file = random.choice(photo_files)
 
-            # Укажите путь к выбранному файлу в качестве изображения
+            # путь к выбранному файлу в качестве изображения
             fake_photo.image = random_photo_file
 
-            # Свяжите фейковую фотографию с выбранным постом
+            # Связываем фейковую фотографию с выбранным постом
             fake_photo.post = post
 
-            # Сохраните фейковую фотографию
+            # Сохраняем фейковую фотографию
             fake_photo.save()
 
 
