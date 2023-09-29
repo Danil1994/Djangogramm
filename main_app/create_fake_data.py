@@ -1,14 +1,15 @@
 import os
 import random
 import django
+from dotenv import load_dotenv
+
+load_dotenv()
+photo_folder = os.getenv('photo_folder')
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "djangogramm.settings")
 django.setup()
 
-
 from faker import Faker
 from main_app.models import Comment, CustomUser, Like, Photo, Post, Tag
-
-
 
 fake = Faker()
 
@@ -46,7 +47,7 @@ def create_fake_posts(num_posts=10):
 
 def create_fake_photos():
     # список файлов из папки с фотографиями
-    photo_folder = '../media/photos'
+
     photo_files = [os.path.join(photo_folder, filename) for filename in os.listdir(photo_folder) if
                    os.path.isfile(os.path.join(photo_folder, filename))]
 
