@@ -1,12 +1,22 @@
-from datetime import datetime
+import pathlib
+import uuid
 
+import django
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.urls import reverse
+from django.utils.text import slugify
+
+
+def photo_file_path(instance: "Photo", filename: str):
+    author_slug = slugify(instance.post.author.username)
+    post_name_slug = slugify(instance.post.name)
+    unique_filename = f"{author_slug}--{post_name_slug}--{uuid.uuid4()}" + pathlib.Path(filename).suffix
+    return pathlib.Path('photos/') / unique_filename
 
 
 class Photo(models.Model):
-    image = models.ImageField(upload_to='photos/', blank=True, null=True)
+    image = models.ImageField(upload_to=photo_file_path, blank=True, null=True)
     post = models.ForeignKey('Post', on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
@@ -20,9 +30,15 @@ class Tag(models.Model):
         return self.tag
 
 
+def avatar_file_path(instance: "CustomUser", filename: str):
+    username_slug = slugify(instance.customuser.username)
+    unique_filename = f"{username_slug}--{uuid.uuid4()}" + pathlib.Path(filename).suffix
+    return pathlib.Path('avatars/') / unique_filename
+
+
 class CustomUser(AbstractUser):
     bio = models.TextField(max_length=1000, help_text='Introduce yourself', default=None, blank=True, null=True)
-    avatar = models.ImageField(upload_to='avatars/', default='avatars/base_avatar.png')
+    avatar = models.ImageField(upload_to=avatar_file_path, default='avatars/base_avatar.png')
 
     def __str__(self):
         return self.username
@@ -33,7 +49,7 @@ class Post(models.Model):
     summary = models.TextField(max_length=1000, help_text="Enter description of the post")
     author = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)
     tag = models.ManyToManyField(Tag, blank=True)
-    publish_date = models.DateField('pubdate', default=datetime.today(), auto_now_add=False)
+    publish_date = models.DateField('pubdate', default=django.utils.timezone.now, auto_now_add=False)
 
     def __str__(self):
         return self.name
@@ -44,12 +60,15 @@ class Post(models.Model):
         """
         return reverse('post_detail', args=[str(self.pk)])
 
+    def has_less_than_five_photos(self):
+        return self.photo_set.count() < 5
+
 
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    user = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)
+    author = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)
     text = models.TextField(max_length=1000)
-    publish_date = models.DateField('pubdate', default=datetime.today(), auto_now_add=False)
+    publish_date = models.DateField('pubdate', default=django.utils.timezone.now, auto_now_add=False)
 
     def __str__(self):
         return self.text[:75]

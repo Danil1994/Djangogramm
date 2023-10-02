@@ -1,5 +1,6 @@
 import os
 import random
+
 import django
 from dotenv import load_dotenv
 
@@ -9,6 +10,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "djangogramm.settings")
 django.setup()
 
 from faker import Faker
+
 from main_app.models import Comment, CustomUser, Like, Photo, Post, Tag
 
 fake = Faker()
@@ -54,22 +56,23 @@ def create_fake_photos():
     posts = Post.objects.all()
 
     for post in posts:
+        while post.has_less_than_five_photos():
 
-        for _ in range(random.randint(1, 5)):
-            # создать фейковую фотографию
-            fake_photo = Photo()
+            for _ in range(random.randint(1, 5)):
+                # создать фейковую фотографию
+                fake_photo = Photo()
 
-            # берем случайный файл из списка фотографий
-            random_photo_file = random.choice(photo_files)
+                # берем случайный файл из списка фотографий
+                random_photo_file = random.choice(photo_files)
 
-            # путь к выбранному файлу в качестве изображения
-            fake_photo.image = random_photo_file
+                # путь к выбранному файлу в качестве изображения
+                fake_photo.image = random_photo_file
 
-            # Связываем фейковую фотографию с выбранным постом
-            fake_photo.post = post
+                # Связываем фейковую фотографию с выбранным постом
+                fake_photo.post = post
 
-            # Сохраняем фейковую фотографию
-            fake_photo.save()
+                # Сохраняем фейковую фотографию
+                fake_photo.save()
 
 
 def create_fake_comments():

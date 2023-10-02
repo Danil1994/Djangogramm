@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.http import HttpRequest, HttpResponse
@@ -7,11 +8,11 @@ from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView
 
 from .forms import (CommentForm, CustomUserChangeForm, CustomUserCreationForm,
-                    PhotoForm, PhotoFormSet, PostForm, TagForm)
-from .models import Comment, CustomUser, Like, Photo, Post, Tag
+                    PhotoFormSet, PostForm, TagForm)
+from .models import CustomUser, Like, Photo, Post, Tag
 
 
-###  GET ###
+#  GET ###
 def index(request: HttpRequest) -> HttpResponse:
     posts_list = Post.objects.all().order_by('publish_date')
     return render(request, 'index.html', context={'posts_list': posts_list})
@@ -51,7 +52,7 @@ def post_detail(request: HttpRequest, pk: int) -> HttpResponse:
     return render(request, 'main_app/post_detail.html', {'post': post, 'photos': photos, 'like': like, 'tags': tags})
 
 
-### POST ###
+#POST ###
 @login_required
 def create_post(request):
     if request.method == 'POST':
@@ -70,14 +71,16 @@ def create_post(request):
                     photo.post = post
                     photo.save()
 
-            tags = tag_form.cleaned_data['tag'].split(',')  # Предполагается, что теги разделяются запятыми
+            tags = tag_form.cleaned_data['tag'].split(',')
 
             for tag in tags:
                 tag, created = Tag.objects.get_or_create(tag=tag.strip())
                 post.tag.add(tag)
 
+            messages.success(request, 'Пост успешно создан.')  # Уведомление об успешном создании поста
             return redirect('post_detail', pk=post.pk)
-
+        else:
+            messages.error(request, 'Пожалуйста, исправьте ошибки в форме.')  # Уведомление об ошибках в форме
     else:
         post_form = PostForm()
         photo_formset = PhotoFormSet(queryset=Photo.objects.none())

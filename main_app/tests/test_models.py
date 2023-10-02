@@ -54,7 +54,7 @@ class PostModelTestCase(TestCase):
         )
 
         self.tag = Tag.objects.create(tag='testtag')
-        self.today_date=datetime.today()
+        self.today_date = datetime.today()
         self.post = Post.objects.create(
             name='Test Post',
             summary='This is a test post summary',
@@ -99,7 +99,7 @@ class CommentModelTestCase(TestCase):
 
         self.comment = Comment.objects.create(
             post=self.post,
-            user=self.user,
+            author=self.user,
             text='This is a test comment',
             publish_date=self.today_date
         )
@@ -114,7 +114,7 @@ class CommentModelTestCase(TestCase):
         self.assertEqual(self.comment.post, self.post)
 
     def test_comment_user_field(self):
-        self.assertEqual(self.comment.user, self.user)
+        self.assertEqual(self.comment.author, self.user)
 
     def test_comment_publish_date_field(self):
         self.assertEqual(self.comment.publish_date, self.today_date)
