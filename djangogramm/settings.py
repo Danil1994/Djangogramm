@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'main_app.apps.AppConfig',
+    'django_nose',
 ]
 
 MIDDLEWARE = [
@@ -130,3 +131,5 @@ LOGIN_REDIRECT_URL = '/'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 AUTH_USER_MODEL = "main_app.CustomUser"  # new
+
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'

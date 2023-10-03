@@ -7,9 +7,9 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView
 
-from .forms import (CommentForm, CustomUserChangeForm, CustomUserCreationForm,
-                    PhotoFormSet, PostForm, TagForm)
-from .models import CustomUser, Like, Photo, Post, Tag
+from main_app.forms import (CommentForm, CustomUserChangeForm, CustomUserCreationForm,
+                            PhotoFormSet, PostForm, TagForm)
+from main_app.models import CustomUser, Like, Photo, Post, Tag
 
 
 #  GET ###
@@ -20,7 +20,13 @@ def index(request: HttpRequest) -> HttpResponse:
 
 @login_required
 def user_profile(request: HttpRequest) -> HttpResponse:
-    return render(request, 'main_app/user_profile.html')
+    return render(request, 'main_app/self_profile.html')
+
+
+def view_users_profile(request, user_id):
+    user = CustomUser.objects.get(pk=user_id)
+    posts = Post.objects.filter(author=user)
+    return render(request, 'main_app/view_users_profile.html', {'other_user': user, 'posts': posts})
 
 
 def explore(request: HttpRequest) -> HttpResponse:
@@ -32,12 +38,12 @@ class SearchResultsView(ListView):
     template_name = 'main_app/search_results.html'
 
     def get_queryset(self):
-
         query = self.request.GET.get('q')
         if query:
+            # Используйте distinct() для удаления дубликатов
             return Post.objects.filter(
                 Q(name__icontains=query) | Q(tag__tag__icontains=query)
-            )
+            ).distinct()
         else:
             return Post.objects.none()
 
@@ -52,7 +58,7 @@ def post_detail(request: HttpRequest, pk: int) -> HttpResponse:
     return render(request, 'main_app/post_detail.html', {'post': post, 'photos': photos, 'like': like, 'tags': tags})
 
 
-#POST ###
+# POST ###
 @login_required
 def create_post(request):
     if request.method == 'POST':
@@ -136,7 +142,7 @@ def add_like_to_post(request: HttpResponse, post_pk: int) -> HttpResponse:
         existing_like = Like.objects.filter(post=post, user=request.user).first()
 
         if existing_like:
-            # Лайк уже поставлен, можно реализовать отмену лайка, если нужно
+            # Лайк уже поставлен, можно сделать отмену лайка, если нужно
             existing_like.delete()
         else:
             # Создаем и сохраняем новый лайк

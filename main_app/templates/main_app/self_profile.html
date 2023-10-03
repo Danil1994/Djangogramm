@@ -15,7 +15,14 @@
     </div>
 
     <div class="profile-posts">
-        <!-- Здесь могут быть ваши посты пользователя -->
+        <h2>Посты пользователя:</h2>
+        <ul>
+            {% for post in posts %}
+            <li><a href="{{ post.get_absolute_url }}">{{post.name}}</a></li>
+            {% empty %}
+            <li>У вас нет постов.</li>
+            {% endfor %}
+        </ul>
     </div>
 </main>
 {% endblock %}

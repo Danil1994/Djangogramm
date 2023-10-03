@@ -8,7 +8,8 @@ urlpatterns = [
     path('explore', views.explore, name='explore'),
     path('signup/', SignUpView.as_view(), name='signup'),
     # in the future url user has id
-    path('profile', views.user_profile, name='user_profile'),
+    path('profile', views.user_profile, name='self_profile'),
+    path('profile/<int:user_id>/', views.view_users_profile, name='view_users_profile'),
     path('profile/edit', views.EditProfile.as_view(), name='edit_profile'),
     re_path(r'^post/(?P<pk>[0-9]+)$', views.post_detail, name='post_detail'),
     path('post/create/', views.create_post, name='post_create'),

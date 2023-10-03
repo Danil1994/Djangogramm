@@ -31,7 +31,7 @@ class Tag(models.Model):
 
 
 def avatar_file_path(instance: "CustomUser", filename: str):
-    username_slug = slugify(instance.customuser.username)
+    username_slug = slugify(instance.username)
     unique_filename = f"{username_slug}--{uuid.uuid4()}" + pathlib.Path(filename).suffix
     return pathlib.Path('avatars/') / unique_filename
 
@@ -42,6 +42,12 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.username
+
+    def get_absolute_url(self):
+        """
+        Returns the post`s url.
+        """
+        return reverse('view_users_profile', args=[str(self.pk)])
 
 
 class Post(models.Model):
@@ -79,4 +85,4 @@ class Like(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
-        return f"Like by {self.user.username} on {self.post.name}"
+        return f"Like by {self.user.name} on {self.post.name}"

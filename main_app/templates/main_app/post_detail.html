@@ -6,7 +6,10 @@
 
 <div class="post">
     <h2>{{ post.name }}</h2>
-
+    <div class="post-meta">
+        <p class="author-and-pub-date"><i>Автор: <a href="{{ post.author.get_absolute_url }}">{{ post.author }}</a>,
+            pub_date {{ post.publish_date }}</i></p>
+    </div>
 
     <!-- Отображение фотографий поста -->
     <div class="post-photos">
@@ -15,10 +18,6 @@
         {% endfor %}
     </div>
 
-    <div class="post-meta">
-        <p class="author">Автор: {{ post.author }}</p>
-        <p class="date">Дата публикации: {{ post.publish_date }}</p>
-    </div>
 
     <!-- Отображение тегов поста -->
     <div class="post-tags">
@@ -58,7 +57,7 @@
 
         {% for comment in post.comment_set.all %}
         <div class="comment-frame">
-            <p class="comment-author"><strong>{{ comment.user }}</strong></p>
+            <p class="comment-author"><strong>{{ comment.author }}</strong></p>
             <p class="comment-text">{{ comment.text }}</p>
             <p class="comment-date">{{ comment.publish_date }}</p>
         </div>

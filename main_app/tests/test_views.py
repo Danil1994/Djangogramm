@@ -31,7 +31,7 @@ class UserProfileTest(TestCase):
         self.client.login(username='testuser', password='testpass')
         response = self.client.get(reverse('user_profile'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'main_app/user_profile.html')
+        self.assertTemplateUsed(response, 'main_app/self_profile.html')
 
     def test_user_profile_view_with_unauthenticated_user(self):
         response = self.client.get(reverse('user_profile'))
