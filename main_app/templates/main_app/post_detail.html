@@ -1,8 +1,14 @@
 {% extends 'base.html' %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DjangoGram</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/post_detail.css' %}">
+</head>
 
 {% block content %}
-{% load static %}
-<link rel="stylesheet" href="{% static 'css/post_detail.css' %}">
+
 
 <div class="post">
     <h2>{{ post.name }}</h2>
@@ -31,14 +37,16 @@
     </div>
 
 
-    <!-- Кнопка "Лайк" и количество лайков -->
-    <div class="like-section">
-        <form method="post" action="{% url 'add_like_to_post' post_pk=post.pk %}">
-            {% csrf_token %}
-            <button type="submit" class="like-button">
-                {% if like %}Удалить лайк{% else %}Поставить лайк{% endif %}
-            </button>
-        </form>
+    <!-- Контейнер для кнопки "Лайк" и количества лайков -->
+    <div class="like-container">
+        <div class="like-section">
+            <form method="post" action="{% url 'add_like_to_post' post_pk=post.pk %}">
+                {% csrf_token %}
+                <button type="submit" class="like-button">
+                    {% if like %}Удалить лайк{% else %}Поставить лайк{% endif %}
+                </button>
+            </form>
+        </div>
         <p class="likes-count">{{ post.like_set.count }} лайков</p>
     </div>
 </div>

@@ -3,10 +3,27 @@
 {% block content %}
 <p>Главная страница</p>
 <a>Posts</a>
-{% for post in posts_list %}
+{% for post in posts %}
 <li>
     <a href="{{ post.get_absolute_url }}">{{post.name}}</a>
 </li>
-{%endfor%}
+{% endfor %}
 
+<div class="pagination">
+  <span class="step-links">
+    {% if posts.has_previous %}
+      <a href="?page=1">&laquo; первая</a>
+      <a href="?page={{ posts.previous_page_number }}">предыдущая</a>
+    {% endif %}
+
+    <span class="current">
+      Страница {{ posts.number }} из {{ posts.paginator.num_pages }}.
+    </span>
+
+    {% if posts.has_next %}
+      <a href="?page={{ posts.next_page_number }}">следующая</a>
+      <a href="?page={{ posts.paginator.num_pages }}">последняя &raquo;</a>
+    {% endif %}
+  </span>
+</div>
 {% endblock %}

@@ -1,5 +1,5 @@
 /* Импорт текущего файла CSS */
-@import url('css.styles.css');
+@import url('styles.css');
 
 
 .comment-frame {
@@ -12,4 +12,22 @@
 
 .comment-date {
     float: right; /* Выравнивание текста справа */
+}
+
+.like-container {
+    display: flex;
+    align-items: left;
+    margin-top: 10px;
+}
+
+.like-section {
+    display: flex;
+    align-items: left;
+}
+.like-button {
+    margin-right: 10px; /* Расстояние между кнопкой и количеством лайков */
+}
+
+.likes-count {
+    margin: 0; /* Убираем отступы вокруг текста */
 }

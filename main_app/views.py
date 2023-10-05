@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView
+from django.core.paginator import Paginator
 
 from main_app.forms import (CommentForm, CustomUserChangeForm, CustomUserCreationForm,
                             PhotoFormSet, PostForm, TagForm)
@@ -15,12 +16,21 @@ from main_app.models import CustomUser, Like, Photo, Post, Tag
 #  GET ###
 def index(request: HttpRequest) -> HttpResponse:
     posts_list = Post.objects.all().order_by('publish_date')
-    return render(request, 'index.html', context={'posts_list': posts_list})
+    paginator = Paginator(posts_list, 10)  # Разделяем список постов на 10 постов на страницу
+    page_number = request.GET.get('page')  # Получаем номер страницы из параметра запроса
+    posts = paginator.get_page(page_number)  # Получаем объект страницы постов для текущей страницы
+
+    context = {
+        'posts': posts
+    }
+    return render(request, 'index.html', context)
 
 
 @login_required
 def user_profile(request: HttpRequest) -> HttpResponse:
-    return render(request, 'main_app/self_profile.html')
+    user = request.user  # Получаем текущего пользователя
+    posts = Post.objects.filter(author=user)  # Получаем все посты пользователя
+    return render(request, 'main_app/self_profile.html', {'user': user, 'posts': posts})
 
 
 def view_users_profile(request, user_id):
@@ -40,7 +50,7 @@ class SearchResultsView(ListView):
     def get_queryset(self):
         query = self.request.GET.get('q')
         if query:
-            # Используйте distinct() для удаления дубликатов
+            # distinct() для удаления дубликатов
             return Post.objects.filter(
                 Q(name__icontains=query) | Q(tag__tag__icontains=query)
             ).distinct()
@@ -60,23 +70,24 @@ def post_detail(request: HttpRequest, pk: int) -> HttpResponse:
 
 # POST ###
 @login_required
-def create_post(request):
+def create_post(request: HttpRequest):
     if request.method == 'POST':
         post_form = PostForm(request.POST)
         photo_formset = PhotoFormSet(request.POST, request.FILES, queryset=Photo.objects.none())
         tag_form = TagForm(request.POST)
-
+        # если все 3 формы валидны
         if post_form.is_valid() and photo_formset.is_valid() and tag_form.is_valid():
+            # create post
             post = post_form.save(commit=False)
             post.author = request.user
             post.save()
-
+            # add all photo to post
             for photo_form in photo_formset:
                 if photo_form.cleaned_data.get('image'):
                     photo = photo_form.save(commit=False)
                     photo.post = post
                     photo.save()
-
+            # split tags and add them to post
             tags = tag_form.cleaned_data['tag'].split(',')
 
             for tag in tags:
@@ -87,6 +98,8 @@ def create_post(request):
             return redirect('post_detail', pk=post.pk)
         else:
             messages.error(request, 'Пожалуйста, исправьте ошибки в форме.')  # Уведомление об ошибках в форме
+
+    # if some form is not valid
     else:
         post_form = PostForm()
         photo_formset = PhotoFormSet(queryset=Photo.objects.none())
@@ -103,6 +116,12 @@ class SignUpView(CreateView):
     form_class = CustomUserCreationForm
     success_url = reverse_lazy("login")
     template_name = "registration/signup.html"
+
+    def form_invalid(self, form):
+        # Получаем сообщения об ошибках из формы
+        error_messages = form.errors
+        # Передаем сообщения об ошибках в контекст шаблона
+        return self.render_to_response(self.get_context_data(form=form, error_messages=error_messages))
 
 
 class EditProfile(UpdateView):

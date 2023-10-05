@@ -66,8 +66,8 @@ class Post(models.Model):
         """
         return reverse('post_detail', args=[str(self.pk)])
 
-    def has_less_than_five_photos(self):
-        return self.photo_set.count() < 5
+    def post_has_no_photo(self):
+        return self.photo_set.count() == 0
 
 
 class Comment(models.Model):
