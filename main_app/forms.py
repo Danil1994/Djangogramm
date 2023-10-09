@@ -1,7 +1,8 @@
 import os
 
 from django import forms
-from django.contrib.auth.forms import UserChangeForm, UserCreationForm
+from django.contrib.auth.forms import (AuthenticationForm, UserChangeForm,
+                                       UserCreationForm)
 from django.forms import modelformset_factory
 
 from main_app.models import Comment, CustomUser, Photo, Post, Tag
@@ -30,6 +31,13 @@ class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ['name', 'summary', ]
+
+
+class EmailAuthenticationForm(AuthenticationForm):
+    username = forms.EmailField(widget=forms.EmailInput(), label='Email')
+
+    class Meta:
+        fields = ['email', 'password']
 
 
 class CustomUserCreationForm(UserCreationForm):

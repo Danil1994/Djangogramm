@@ -2,11 +2,8 @@ import os
 import random
 
 import django
-from dotenv import load_dotenv
 from django.conf import settings
 
-
-load_dotenv()
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "djangogramm.settings")
 django.setup()
 
@@ -14,7 +11,7 @@ from faker import Faker
 from main_app.models import Comment, CustomUser, Like, Photo, Post, Tag
 
 fake = Faker()
-photo_directory = os.path.join(settings.MEDIA_ROOT, 'photos/')
+fake_photo_directory = os.path.join(settings.MEDIA_ROOT, 'fake_photos/')
 
 
 def create_fake_tags(num_tags=10):
@@ -62,10 +59,10 @@ def create_fake_photos():
                 fake_photo = Photo()
 
                 # берем случайный файл из списка фотографий
-                random_photo_file = random.choice(os.listdir(photo_directory))
+                random_photo_file = random.choice(os.listdir(fake_photo_directory))
 
                 # полный путь к выбранному файлу в качестве изображения
-                photo_path = os.path.join(photo_directory, random_photo_file)
+                photo_path = os.path.join(fake_photo_directory, random_photo_file)
 
                 # Связываем фейковую фотографию с выбранным постом
                 fake_photo.post = post
@@ -73,7 +70,7 @@ def create_fake_photos():
                 # Сохраняем фейковую фотографию
                 fake_photo.image.save(random_photo_file, open(photo_path, 'rb'))
 
-    print(f"Фейк фото успешно созданы.")
+    print("Фейк фото успешно созданы.")
 
 
 def create_fake_comments():
@@ -90,7 +87,7 @@ def create_fake_comments():
                 comment.author = random.choice(users)
                 comment.text = fake.paragraph(nb_sentences=3)
                 comment.save()
-    print(f"Фейк комментарии успешно созданы.")
+    print("Фейк комментарии успешно созданы.")
 
 
 def create_fake_likes():
@@ -105,7 +102,7 @@ def create_fake_likes():
             like.post = post
             like.user = random.choice(users)
             like.save()
-    print(f"Фейк лайки успешно созданы.")
+    print("Фейк лайки успешно созданы.")
 
 
 if __name__ == '__main__':

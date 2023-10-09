@@ -37,6 +37,7 @@ def avatar_file_path(instance: "CustomUser", filename: str):
 
 
 class CustomUser(AbstractUser):
+    email = models.EmailField(unique=True)
     bio = models.TextField(max_length=1000, help_text='Introduce yourself', default=None, blank=True, null=True)
     avatar = models.ImageField(upload_to=avatar_file_path, default='avatars/base_avatar.png')
 

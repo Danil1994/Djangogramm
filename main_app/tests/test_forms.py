@@ -2,8 +2,8 @@ from django import forms
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 
-from main_app.forms import (CommentForm, CustomUserCreationForm,
-                            PostForm, TagForm, validate_image_extension)
+from main_app.forms import (CommentForm, CustomUserCreationForm, PostForm,
+                            TagForm, validate_image_extension)
 from main_app.models import CustomUser, Post
 
 

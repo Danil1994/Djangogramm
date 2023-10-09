@@ -1,5 +1,34 @@
-an application similar to Instagram, which we named DjangoGramm. This application has a web interface and offers the
+# Djangogramm
+
+An application similar to Instagram, which we named DjangoGramm. This application has a web interface and offers the
 following functionalities:
+
+Registration and Confirmation;
+Post Creation and Viewing;
+Feed of Latest Posts;
+Restricted Access for Guests;
+
+link to UML-diagrams
+`models - https://drive.google.com/file/d/1i-Auyu0iFgj87nUHLyb_s4vJ-KUphytt/view?usp=sharing`
+`pages - https://drive.google.com/file/d/1_Z9TZ3NYJAc8bkPw2vy6mIVHadlal85g/view?usp=drive_link`
+
+## install
+
+1. Clone repo:
+  --Clone with SSH `git clone git@git.foxminded.ua:foxstudent103370/task_11.git`
+  --Clone with HTTPS `git clone https://git.foxminded.ua/foxstudent103370/task_11.git`
+
+2. Go to your project folder: `cd task_11`
+3. Install reuirements.txt: `pip install -r requirements.txt`
+
+## Run
+
+1. Run server: `python manage.py runserver`
+2. Go to link `http://localhost:8000` in your browser.
+
+## Using
+
+
 
 Registration and Confirmation:
 Users can register on our website using their email addresses. After completing the basic registration, each user
@@ -8,8 +37,8 @@ profile page, where they can add their full name, bio, and avatar.
 
 Post Creation and Viewing:
 Users can create posts with images and add multiple images to each post. Additionally, each post can be tagged with
-multiple tags, and users can add new tags to their posts. Users have the ability to like posts and also remove their
-likes.
+multiple tags. Users have the ability to like posts and also remove their
+likes and write comment.
 
 Feed of Latest Posts:
 Our users can view posts from other users through a convenient feed of the latest publications. This feature allows
@@ -19,6 +48,10 @@ Restricted Access for Guests:
 Unauthorized guests do not have access to user profiles and photos. To view content, a user must be registered and
 logged in.
 
-link to UML-diagrams
-models - https://drive.google.com/file/d/1i-Auyu0iFgj87nUHLyb_s4vJ-KUphytt/view?usp=sharing
-pages - https://drive.google.com/file/d/1_Z9TZ3NYJAc8bkPw2vy6mIVHadlal85g/view?usp=drive_link
+## Help to develop
+
+1. Fork the project
+2. Create new branch: `git checkout -b feature/new_ability`
+3. Commit new changes: `git commit -m 'Add new'`
+4. Push changes: `git push origin feature/Add new`
+5. Create request to update repo (Pull Request) на GitHub

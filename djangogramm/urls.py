@@ -17,8 +17,11 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.contrib.auth.views import LoginView
 from django.urls import include, path
 from django.views.generic import RedirectView
+
+from main_app.forms import EmailAuthenticationForm
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -36,5 +39,9 @@ urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += [
+    # Подключение кастомной формы входа (EmailAuthenticationForm)
+    path('accounts/login/', LoginView.as_view(authentication_form=EmailAuthenticationForm), name='login'),
+    # Включение стандартных URL-шаблонов аутентификации Django
     path('accounts/', include('django.contrib.auth.urls')),
+
 ]
