@@ -4,7 +4,7 @@ import random
 import django
 from django.conf import settings
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "djangogramm.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", 'djangogramm.settings')
 django.setup()
 
 from faker import Faker

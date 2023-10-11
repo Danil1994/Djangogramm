@@ -18,7 +18,7 @@ link to UML-diagrams
   --Clone with SSH `git clone git@git.foxminded.ua:foxstudent103370/task_11.git`
   --Clone with HTTPS `git clone https://git.foxminded.ua/foxstudent103370/task_11.git`
 
-2. Go to your project folder: `cd task_11`
+2. Go to your project folder: `path/to/the/ task_11`
 3. Install reuirements.txt: `pip install -r requirements.txt`
 
 ## Run
@@ -27,8 +27,6 @@ link to UML-diagrams
 2. Go to link `http://localhost:8000` in your browser.
 
 ## Using
-
-
 
 Registration and Confirmation:
 Users can register on our website using their email addresses. After completing the basic registration, each user
@@ -47,6 +45,19 @@ users to stay up to date with all the new posts.
 Restricted Access for Guests:
 Unauthorized guests do not have access to user profiles and photos. To view content, a user must be registered and
 logged in.
+
+## Create fake data.
+Using python -m main_app.create_fake_data to create fake data in th app (posts, users, comment, ect.) 
+!WARNING! 
+Using `python -m main_app.create_fake_data` you create new photo in the folder "task_11/media/photos". But if you 
+drop your DB you don`t delete this photo. So if you wont to do it you must clean this folder separately.
+
+## Admin panel.
+They are created superuser. With next parameters:
+--username: admin
+--email: one12@mail.com
+--password: 1234
+Enter it to access the admin panel.
 
 ## Help to develop
 

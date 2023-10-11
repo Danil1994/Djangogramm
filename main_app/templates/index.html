@@ -3,10 +3,11 @@
 {% block content %}
 <p>Главная страница</p>
 <a>Posts</a>
-{% for post in posts %}
-<li>
-    <a href="{{ post.get_absolute_url }}">{{post.name}}</a>
-</li>
+{% for post_with_photos in posts %}
+  <h2><a href="{{ post_with_photos.post.get_absolute_url }}">{{post_with_photos.post.name}}</a></h2>
+  {% for photo in post_with_photos.photos %}
+    <img src="{{ photo.image.url }}" alt="Photo" width="150" height="150">
+  {% endfor %}
 {% endfor %}
 
 <div class="pagination">

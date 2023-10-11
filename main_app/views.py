@@ -15,14 +15,20 @@ from main_app.models import CustomUser, Like, Photo, Post, Tag
 
 
 #  GET ###
-def index(request: HttpRequest) -> HttpResponse:
+def index(request):
     posts_list = Post.objects.all().order_by('publish_date')
-    paginator = Paginator(posts_list, 10)  # Разделяем список постов на 10 постов на страницу
-    page_number = request.GET.get('page')  # Получаем номер страницы из параметра запроса
-    posts = paginator.get_page(page_number)  # Получаем объект страницы постов для текущей страницы
+    paginator = Paginator(posts_list, 10)
+    page_number = request.GET.get('page')
+    posts = paginator.get_page(page_number)
+
+    # Получите фотографии для каждого поста и добавьте их в контекст
+    posts_with_photos = []
+    for post in posts:
+        photos = Photo.objects.filter(post=post)
+        posts_with_photos.append({'post': post, 'photos': photos})
 
     context = {
-        'posts': posts
+        'posts': posts_with_photos
     }
     return render(request, 'index.html', context)
 
