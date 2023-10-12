@@ -10,7 +10,7 @@ class IndexViewTest(TestCase):
     def test_index_view_with_no_posts(self):
         response = self.client.get(reverse('index'))
         self.assertEqual(response.status_code, 200)
-        self.assertQuerysetEqual(response.context['posts_list'], [])
+        self.assertQuerysetEqual(response.context['posts'], [])
 
     def test_index_view_with_posts(self):
         Post.objects.create(name='Post 1', summary='Summary 1')
@@ -18,9 +18,10 @@ class IndexViewTest(TestCase):
 
         response = self.client.get(reverse('index'))
         self.assertEqual(response.status_code, 200)
-        posts = response.context['posts_list']
+        posts = response.context['posts']
 
-        self.assertQuerysetEqual(posts, ['Post 1', 'Post 2'], transform=str)
+        self.assertQuerysetEqual(posts, ["{'post': <Post: Post 1>, 'photos': <QuerySet []>}",
+                                         "{'post': <Post: Post 2>, 'photos': <QuerySet []>}"], transform=str)
 
 
 class UserProfileTest(TestCase):
@@ -29,14 +30,14 @@ class UserProfileTest(TestCase):
 
     def test_user_profile_view_with_authenticated_user(self):
         self.client.login(username='testuser', password='testpass')
-        response = self.client.get(reverse('user_profile'))
+        response = self.client.get(reverse('self_profile'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'main_app/self_profile.html')
 
     def test_user_profile_view_with_unauthenticated_user(self):
-        response = self.client.get(reverse('user_profile'))
+        response = self.client.get(reverse('self_profile'))
         self.assertEqual(response.status_code, 302)  # 302 is the HTTP status code for a redirect (login required)
-        self.assertRedirects(response, f'/accounts/login/?next={reverse("user_profile")}')
+        self.assertRedirects(response, f'/accounts/login/?next={reverse("self_profile")}')
 
 
 class ExploreViewTest(TestCase):
@@ -102,7 +103,7 @@ class PostDetailViewTest(TestCase):
         post = Post.objects.first()
         response = self.client.get(reverse('post_detail', args=[post.pk]))
         self.assertEqual(response.status_code, 302)
-        expected_redirect_url = f'/accounts/login/?next=/main_app/post/{post.pk}'
+        expected_redirect_url = f'/accounts/login/?next=/main_app/post/1'
         self.assertRedirects(response, expected_redirect_url)
 
 
@@ -110,31 +111,47 @@ class CreatePostViewTest(TestCase):
 
     def setUp(self):
         # Создаем пользователя для тестирования
-        self.user = CustomUser.objects.create_user(username='testuser', password='Gfhjkm1234')
+        self.user = CustomUser.objects.create_user(
+            username='testuser',
+            email='test@example.com',
+            password='testpassword'
+        )
 
     def test_create_post_view(self):
         # Логинимся под созданным пользователем
-        self.client.login(username='testuser', password='Gfhjkm1234')
+        self.client.login(
+            username='testuser',
+            email='test@example.com',
+            password='testpassword'
+        )
 
         # Получаем URL для создания поста
         url = reverse('post_create')
 
         # Отправляем POST-запрос с корректными данными
-        data = {
-            'title': 'Test Post',
-            'content': 'Test Content',
-            'tag': 'tag1, tag2'  # Передаем теги через запятую
-            # Здесь также должны быть данные для фотографий, но я их опускаю для простоты теста
+        post_data = {
+            'name': 'Test Post',
+            'summary': 'Test Content',
+            'tag': 'tag1,tag2'
         }
-        response = self.client.post(url, data, format='multipart')
+        photo_data = {
+            'form-TOTAL_FORMS': '1',
+            'form-INITIAL_FORMS': '0',
+            'form-MAX_NUM_FORMS': '',
+            'form-0-image': ''
+        }
+        tag_data = {
+            'tag': 'tag1,tag2'
+        }
+        response = self.client.post(url, {**post_data, **photo_data, **tag_data})
 
         # Проверяем, что после отправки формы пользователь перенаправляется на страницу деталей поста
         self.assertRedirects(response, reverse('post_detail', args=[1]))  # Предполагается, что первый пост имеет pk=1
 
         # Проверяем, что пост был успешно создан в базе данных
         self.assertEqual(Post.objects.count(), 1)
-        self.assertEqual(Post.objects.first().title, 'Test Post')
-        self.assertEqual(Post.objects.first().content, 'Test Content')
+        self.assertEqual(Post.objects.first().name, 'Test Post')
+        self.assertEqual(Post.objects.first().summary, 'Test Content')
         self.assertEqual(Post.objects.first().author, self.user)
 
 
@@ -155,13 +172,14 @@ class SignUpViewTest(TestCase):
         url = reverse('signup')
         data = {
             'username': 'testuser',
+            'email': 'test@mail.com',
             'password1': 'testpass123',
             'password2': 'testpass123'
         }
         response = self.client.post(url, data)
 
         # Проверяем, что после отправки формы пользователь перенаправляется на страницу входа
-        self.assertRedirects(response, reverse('login'))
+        self.assertRedirects(response, reverse("login"))
 
         # Проверяем, что пользователь создан в базе данных
         self.assertEqual(CustomUser.objects.count(), 1)
@@ -196,7 +214,7 @@ class EditProfileViewTest(TestCase):
         response = self.client.post(url, data)
 
         # Проверяем, что после отправки формы пользователь перенаправляется на страницу профиля
-        self.assertRedirects(response, reverse('user_profile'))
+        self.assertRedirects(response, reverse('self_profile'))
 
         # Обновляем объект пользователя из базы данных
         self.user.refresh_from_db()

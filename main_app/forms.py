@@ -19,7 +19,7 @@ def validate_image_extension(value):
 class PhotoForm(forms.ModelForm):
     class Meta:
         model = Photo
-        fields = ['image']
+        fields = ('image',)
 
     image = forms.ImageField(validators=[validate_image_extension])
 
@@ -30,14 +30,20 @@ PhotoFormSet = modelformset_factory(Photo, form=PhotoForm, extra=5)
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ['name', 'summary', ]
+        fields = ('name', 'summary',)
+
+
+class TagForm(forms.ModelForm):
+    class Meta:
+        model = Tag
+        fields = ('tag',)
 
 
 class EmailAuthenticationForm(AuthenticationForm):
     username = forms.EmailField(widget=forms.EmailInput(), label='Email')
 
     class Meta:
-        fields = ['email', 'password']
+        fields = ('email', 'password')
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -47,6 +53,8 @@ class CustomUserCreationForm(UserCreationForm):
 
 
 class CustomUserChangeForm(UserChangeForm):
+    avatar = forms.ImageField(required=False, widget=forms.FileInput(attrs={'class': 'form-control-file'}))
+
     class Meta:
         model = CustomUser
         fields = ("username", "email", "bio", "avatar")
@@ -56,9 +64,3 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ('text',)
-
-
-class TagForm(forms.ModelForm):
-    class Meta:
-        model = Tag
-        fields = ('tag',)

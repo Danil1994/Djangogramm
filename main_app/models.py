@@ -86,4 +86,4 @@ class Like(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
-        return f"Like by {self.user.name} on {self.post.name}"
+        return f"Like by {self.user.username} on {self.post.name}"

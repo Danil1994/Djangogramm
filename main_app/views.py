@@ -78,11 +78,15 @@ def post_detail(request: HttpRequest, pk: int) -> HttpResponse:
 # POST ###
 @login_required
 def create_post(request: HttpRequest):
+    post_form = PostForm()
+    photo_formset = PhotoFormSet(queryset=Photo.objects.none())
+    tag_form = TagForm()
+
     if request.method == 'POST':
         post_form = PostForm(request.POST)
         photo_formset = PhotoFormSet(request.POST, request.FILES, queryset=Photo.objects.none())
         tag_form = TagForm(request.POST)
-        # если все 3 формы валидны
+
         if post_form.is_valid() and photo_formset.is_valid() and tag_form.is_valid():
             # create post
             post = post_form.save(commit=False)
@@ -104,13 +108,11 @@ def create_post(request: HttpRequest):
             messages.success(request, 'Пост успешно создан.')  # Уведомление об успешном создании поста
             return redirect('post_detail', pk=post.pk)
         else:
-            messages.error(request, 'Пожалуйста, исправьте ошибки в форме.')  # Уведомление об ошибках в форме
-
-    # if some form is not valid
-    else:
-        post_form = PostForm()
-        photo_formset = PhotoFormSet(queryset=Photo.objects.none())
-        tag_form = TagForm()
+            messages.error(request, 'Пожалуйста, исправьте ошибки в форме.')
+            print(f'Post errors: {post_form.errors}',
+                  f'Tag errors: {tag_form.errors}',
+                  f'Photo errors:{photo_formset.errors}'
+                  )
 
     return render(request, 'main_app/create_post.html',
                   {'post_form': post_form,
@@ -134,7 +136,7 @@ class SignUpView(CreateView):
 class EditProfile(UpdateView):
     model = CustomUser
     form_class = CustomUserChangeForm
-    success_url = reverse_lazy("user_profile")
+    success_url = reverse_lazy("self_profile")
     template_name = "registration/edit_profile.html"
 
     def get_object(self, queryset=None):
