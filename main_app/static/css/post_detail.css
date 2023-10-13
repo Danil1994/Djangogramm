@@ -1,0 +1,33 @@
+/* Импорт текущего файла CSS */
+@import url('styles.css');
+
+
+.comment-frame {
+    border: 2px solid #ccc; /* Увеличиваем ширину рамки до 2 пикселей */
+    padding: 10px;
+    margin-bottom: 10px;
+    overflow: auto;
+    float: left; /* Выравнивание элемента слева */
+}
+
+.comment-date {
+    float: right; /* Выравнивание текста справа */
+}
+
+.like-container {
+    display: flex;
+    align-items: left;
+    margin-top: 10px;
+}
+
+.like-section {
+    display: flex;
+    align-items: left;
+}
+.like-button {
+    margin-right: 10px; /* Расстояние между кнопкой и количеством лайков */
+}
+
+.likes-count {
+    margin: 0; /* Убираем отступы вокруг текста */
+}

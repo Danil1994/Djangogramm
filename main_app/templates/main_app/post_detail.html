@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DjangoGram</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/post_detail.css' %}">
+</head>
+
+{% block content %}
+
+
+<div class="post">
+    <h2>{{ post.name }}</h2>
+    <div class="post-meta">
+        <p class="author-and-pub-date"><i>Автор: <a href="{{ post.author.get_absolute_url }}">{{ post.author }}</a>,
+            pub_date {{ post.publish_date }}</i></p>
+    </div>
+
+    <!-- Отображение фотографий поста -->
+    <div class="post-photos">
+        {% for photo in photos %}
+        <img src="{{ photo.image.url }}" alt="Photo" class="post-photo" width="300" height="200">
+        {% endfor %}
+    </div>
+
+
+    <!-- Отображение тегов поста -->
+    <div class="post-tags">
+        <p>Теги: {% for tag in tags %}
+            {{ tag.tag }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}</p>
+
+    </div>
+    <div class="post-summary">
+        <p>{{post.summary}}</p>
+    </div>
+
+
+    <!-- Контейнер для кнопки "Лайк" и количества лайков -->
+    <div class="like-container">
+        <div class="like-section">
+            <form method="post" action="{% url 'add_like_to_post' post_pk=post.pk %}">
+                {% csrf_token %}
+                <button type="submit" class="like-button">
+                    {% if like %}Удалить лайк{% else %}Поставить лайк{% endif %}
+                </button>
+            </form>
+        </div>
+        <p class="likes-count">{{ post.like_set.count }} лайков</p>
+    </div>
+</div>
+
+<!-- Секция комментариев -->
+<div class="comments">
+    <h3>Комментарии</h3>
+    <form method="post" action="{% url 'add_comment_to_post' post.pk %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="comment-button">Добавить комментарий</button>
+    </form>
+
+    <!-- Отображение существующих комментариев -->
+    <div class="existing-comments">
+
+        {% for comment in post.comment_set.all %}
+        <div class="comment-frame">
+            <p class="comment-author"><strong>{{ comment.author }}</strong></p>
+            <p class="comment-text">{{ comment.text }}</p>
+            <p class="comment-date">{{ comment.publish_date }}</p>
+        </div>
+        {% empty %}
+        <p>Комментариев пока нет.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
