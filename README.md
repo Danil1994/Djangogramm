@@ -19,7 +19,9 @@ link to UML-diagrams
   --Clone with HTTPS `git clone https://git.foxminded.ua/foxstudent103370/task_11.git`
 
 2. Go to your project folder: `path/to/the/ task_11`
-3. Install reuirements.txt: `pip install -r requirements.txt`
+3. Load your .env file.
+4. Install requirements.txt: `pip install -r requirements.txt`
+5. Maki migrate:  `python manage.py migrate`
 
 ## Run
 
