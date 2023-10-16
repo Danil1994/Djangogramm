@@ -18,8 +18,10 @@ link to UML-diagrams
   --Clone with SSH `git clone https://github.com/Danil1994/Djangogramm.git`
   --Clone with HTTPS `git clone git@github.com:Danil1994/Djangogramm.git`
 
-2. Go to your project folder: `path/to/the/Djangogramm/`
-3. Install reuirements.txt: `pip install -r requirements.txt`
+2. Go to your project folder: `path/to/the/ task_11`
+3. Load your .env file.
+4. Install requirements.txt: `pip install -r requirements.txt`
+5. Make migrate:  `python manage.py migrate`
 
 ## Run
 
