@@ -15,10 +15,10 @@ link to UML-diagrams
 ## install
 
 1. Clone repo:
-  --Clone with SSH `git clone git@git.foxminded.ua:foxstudent103370/task_11.git`
-  --Clone with HTTPS `git clone https://git.foxminded.ua/foxstudent103370/task_11.git`
+  --Clone with SSH `git clone https://github.com/Danil1994/Djangogramm.git`
+  --Clone with HTTPS `git clone git@github.com:Danil1994/Djangogramm.git`
 
-2. Go to your project folder: `path/to/the/ task_11`
+2. Go to your project folder: `path/to/the/Djangogramm/`
 3. Install reuirements.txt: `pip install -r requirements.txt`
 
 ## Run
