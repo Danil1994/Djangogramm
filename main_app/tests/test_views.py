@@ -103,7 +103,7 @@ class PostDetailViewTest(TestCase):
         post = Post.objects.first()
         response = self.client.get(reverse('post_detail', args=[post.pk]))
         self.assertEqual(response.status_code, 302)
-        expected_redirect_url = f'/accounts/login/?next=/main_app/post/1'
+        expected_redirect_url = '/accounts/login/?next=/main_app/post/1'
         self.assertRedirects(response, expected_redirect_url)
 
 
@@ -295,7 +295,7 @@ class AddLikeToPostViewTest(TestCase):
 
     def test_remove_like_from_post_view_with_authenticated_user(self):
         # Создаем лайк для тестирования
-        like = Like.objects.create(post=self.post, user=self.user)
+        Like.objects.create(post=self.post, user=self.user)
 
         # Логинимся под созданным пользователем
         self.client.login(username='testuser', password='testpass')

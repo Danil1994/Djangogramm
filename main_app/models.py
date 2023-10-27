@@ -1,11 +1,9 @@
 import django
-
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.urls import reverse
-from django.utils.text import slugify
 
-from main_app.helping_func import photo_file_path, avatar_file_path
+from main_app.helping_func import avatar_file_path, photo_file_path
 
 
 # Photo model representing uploaded images
@@ -87,7 +85,8 @@ class Like(models.Model):
     # ForeignKey to the Post model, indicating the post that was liked, with CASCADE deletion behavior
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     # ForeignKey to the CustomUser model representing the user who liked the post
-    # SET_NULL on_delete behavior handles the deletion of related CustomUser objects, allowing likes to exist even if the user is deleted
+    # SET_NULL on_delete behavior handles the deletion of related CustomUser objects,
+    # allowing likes to exist even if the user is deleted
 
     user = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)
 

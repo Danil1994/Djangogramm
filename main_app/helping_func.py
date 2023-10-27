@@ -1,8 +1,10 @@
 import uuid
+from pathlib import Path
+from typing import Any
 
 from django.utils.text import slugify
-from typing import Any, Type
-from pathlib import Path
+
+from main_app.models import CustomUser
 
 
 def photo_file_path(instance: Any, filename: str) -> Path:
@@ -22,7 +24,7 @@ def photo_file_path(instance: Any, filename: str) -> Path:
     return Path('photos/') / unique_filename
 
 
-def avatar_file_path(instance: Type["CustomUser"], filename: str) -> Path:
+def avatar_file_path(instance: CustomUser, filename: str) -> Path:
     """
     Generate the file path for user avatars.
 

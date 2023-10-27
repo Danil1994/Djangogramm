@@ -1,26 +1,19 @@
 from typing import Any, Dict, List
 
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
-from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView, UpdateView
 
-from main_app.forms import (CommentForm, CustomUserChangeForm,
-                            CustomUserCreationForm, PhotoFormSet, CreatePostForm,
-                            TagForm)
-from main_app.models import CustomUser, Like, Photo, Post, Tag, Comment
-from main_app.repositories import (CommentRepository,
-                                   LikeRepository,
-                                   PostCreationRepository,
-                                   PostRepository,
-                                   PhotoRepository,
-                                   SearchRepository)
+from main_app.forms import (CommentForm, CreatePostForm, CustomUserChangeForm,
+                            CustomUserCreationForm, PhotoFormSet, TagForm)
+from main_app.models import CustomUser, Photo, Post
+from main_app.repositories import (CommentRepository, LikeRepository,
+                                   PhotoRepository, PostCreationRepository,
+                                   PostRepository, SearchRepository)
 
 
 class IndexView(ListView):
@@ -96,8 +89,6 @@ class PostDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
-
-
 class CreatePostView(LoginRequiredMixin, CreateView):
     template_name = 'main_app/create_post.html'
     form_class = CreatePostForm
@@ -120,57 +111,17 @@ class CreatePostView(LoginRequiredMixin, CreateView):
         photo_formset = context['photo_formset']
         tag_form = context['tag_form']
 
-        if form.is_valid() and photo_formset.is_valid() and tag_form.is_valid():
-            post = form.save(commit=False)
-            post.author = self.request.user
-            post.save()
-
-            for photo_form in photo_formset:
-                if photo_form.cleaned_data.get('image'):
-                    photo = photo_form.save(commit=False)
-                    photo.post = post
-                    photo.save()
-
-            tags = tag_form.cleaned_data['tag'].split(',')
-            for tag in tags:
-                tag, created = Tag.objects.get_or_create(tag=tag.strip())
-                post.tag.add(tag)
+        if post_form.is_valid() and photo_formset.is_valid() and tag_form.is_valid():
+            post = PostCreationRepository.create_post(user=self.request.user, post_form=post_form,
+                                                      photo_formset=photo_formset,
+                                                      tag_form=tag_form)
 
             return redirect('post_detail', pk=post.pk)
         else:
             return self.render_to_response(
-                self.get_context_data(form=form, post_form=post_form, photo_formset=photo_formset,
+                self.get_context_data(post_form=post_form, photo_formset=photo_formset,
                                       tag_form=tag_form))
 
-
-# class CreatePostView(LoginRequiredMixin, View):
-#     template_name = 'main_app/create_post.html'
-#     form_class = CreatePostForm
-#
-#     def get(self, request):
-#         post_form = self.form_class()
-#         photo_formset = PhotoFormSet(queryset=Photo.objects.none())
-#         tag_form = TagForm()
-#         return render(request, self.template_name,
-#                       {'post_form': post_form, 'photo_formset': photo_formset, 'tag_form': tag_form})
-#
-#     def post(self, request):
-#         post_form = self.form_class(request.POST)
-#         photo_formset = PhotoFormSet(request.POST, request.FILES)
-#         tag_form = TagForm(request.POST)
-#
-#         if post_form.is_valid() and photo_formset.is_valid() and tag_form.is_valid():
-#             name = post_form.cleaned_data['name']
-#             summary = post_form.cleaned_data['summary']
-#             tags = tag_form.cleaned_data['tag']
-#             photos = [form.cleaned_data['image'] for form in photo_formset if form.cleaned_data.get('image')]
-#             post = PostCreationRepository.create_post(request.user, name, summary, tags, photos)
-#             return redirect('post_detail', pk=post.pk)
-#         else:
-#             print('no create')
-#             return render(request, self.template_name,
-#                           {'post_form': post_form, 'photo_formset': photo_formset, 'tag_form': tag_form})
-#
 
 class SignUpView(CreateView):
     form_class = CustomUserCreationForm

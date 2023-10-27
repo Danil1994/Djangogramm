@@ -1,4 +1,4 @@
-from main_app.models import Post, Photo, Like, Comment, Tag
+from main_app.models import Comment, Like, Photo, Post, Tag
 
 
 class PostRepository:
@@ -22,9 +22,9 @@ class PostRepository:
 
 class PostCreationRepository:
     @staticmethod
-    def create_post(form, author, tag_form, photo_formset):
-        post = form.save(commit=False)
-        post.author = author
+    def create_post(user, post_form, photo_formset, tag_form):
+        post = post_form.save(commit=False)
+        post.author = user
         post.save()
 
         for photo_form in photo_formset:
@@ -37,7 +37,6 @@ class PostCreationRepository:
         for tag in tags:
             tag, created = Tag.objects.get_or_create(tag=tag.strip())
             post.tag.add(tag)
-        print('post CreatE!!!!')
         return post
 
 

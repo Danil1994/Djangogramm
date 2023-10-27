@@ -8,6 +8,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", 'djangogramm.settings')
 django.setup()
 
 from faker import Faker
+
 from main_app.models import Comment, CustomUser, Like, Photo, Post, Tag
 
 fake = Faker()
