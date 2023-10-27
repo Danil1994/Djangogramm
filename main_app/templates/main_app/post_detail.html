@@ -63,7 +63,7 @@
     <!-- Отображение существующих комментариев -->
     <div class="existing-comments">
 
-        {% for comment in post.comment_set.all %}
+        {% for comment in comments %}
         <div class="comment-frame">
             <p class="comment-author"><strong>{{ comment.author }}</strong></p>
             <p class="comment-text">{{ comment.text }}</p>

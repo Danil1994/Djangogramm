@@ -11,7 +11,6 @@ class CustomEmailBackend(ModelBackend):
             if user.check_password(password):
                 return user
         except UserModel.DoesNotExist:
-            # Не раскрывайте, что пользователя не существует в системе
             pass
 
         return None

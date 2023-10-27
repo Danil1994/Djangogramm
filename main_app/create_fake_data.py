@@ -13,27 +13,37 @@ from main_app.models import Comment, CustomUser, Like, Photo, Post, Tag
 fake = Faker()
 fake_photo_directory = os.path.join(settings.MEDIA_ROOT, 'fake_photos/')
 
+"""
+Generate fake datas and save them to the database.
 
-def create_fake_tags(num_tags=10):
+Args:
+    num_tags (int, optional): The number of objects to generate. Defaults to 10.
+
+Returns:
+    None
+"""
+
+
+def create_fake_tags(num_tags: int = 10) -> None:
     for _ in range(num_tags):
         tag = Tag()
-        tag.tag = fake.word()  # Генерируем случайное слово
+        tag.tag = fake.word()  # Generate random word
         tag.save()
-    print(f"Успешно создано {num_tags} тегов.")
+    print(f"Successfully created {num_tags} tags.")
 
 
-def create_fake_users(num_users=10):
+def create_fake_users(num_users: int = 10) -> None:
     for _ in range(num_users):
-        user = CustomUser()
-        user.username = fake.user_name()
-        user.email = fake.email()
-        user.password = fake.password()
-        user.bio = fake.text(max_nb_chars=200)
+        username = fake.user_name()
+        email = fake.email()
+        password = fake.password()
+        bio = fake.text(max_nb_chars=200)
+        user = CustomUser(username=username, email=email, password=password, bio=bio)
         user.save()
-    print(f"Успешно создано {num_users} юзеров.")
+    print(f"Successfully created {num_users} users.")
 
 
-def create_fake_posts(num_posts=10):
+def create_fake_posts(num_posts: int = 10) -> None:
     users = CustomUser.objects.all()
     tags = Tag.objects.all()
 
@@ -45,35 +55,32 @@ def create_fake_posts(num_posts=10):
         post.publish_date = fake.date_between(start_date='-1y', end_date='today')
         post.save()
         post.tag.set(random.sample(list(tags), random.randint(1, 3)))
-    print(f"Успешно создано {num_posts} постов.")
+    print(f"Successfully created {num_posts} posts.")
 
 
-def create_fake_photos():
-    # получаем путь к папке с фотографиями из MEDIA_ROOT
+def create_fake_photos() -> None:
     posts = Post.objects.all()
 
     for post in posts:
-        if post.post_has_no_photo():
-            for _ in range(random.randint(1, 5)):
-                # создать фейковую фотографию
-                fake_photo = Photo()
+        for _ in range(random.randint(1, 5)):
+            # create fake photo
+            fake_photo = Photo()
 
-                # берем случайный файл из списка фотографий
-                random_photo_file = random.choice(os.listdir(fake_photo_directory))
+            # Take the random file from photo`s list
+            random_photo_file = random.choice(os.listdir(fake_photo_directory))
 
-                # полный путь к выбранному файлу в качестве изображения
-                photo_path = os.path.join(fake_photo_directory, random_photo_file)
+            # Full path to the file
+            photo_path = os.path.join(fake_photo_directory, random_photo_file)
 
-                # Связываем фейковую фотографию с выбранным постом
-                fake_photo.post = post
+            # Mounting fake photo with current post
+            fake_photo.post = post
 
-                # Сохраняем фейковую фотографию
-                fake_photo.image.save(random_photo_file, open(photo_path, 'rb'))
+            fake_photo.image.save(random_photo_file, open(photo_path, 'rb'))
 
-    print("Фейк фото успешно созданы.")
+    print("Fake photo successfully created.")
 
 
-def create_fake_comments():
+def create_fake_comments() -> None:
     posts = Post.objects.all()
     users = CustomUser.objects.all()
 
@@ -87,22 +94,22 @@ def create_fake_comments():
                 comment.author = random.choice(users)
                 comment.text = fake.paragraph(nb_sentences=3)
                 comment.save()
-    print("Фейк комментарии успешно созданы.")
+    print("Fake comments successfully created.")
 
 
-def create_fake_likes():
+def create_fake_likes() -> None:
     posts = Post.objects.all()
     users = CustomUser.objects.all()
 
     for post in posts:
-        num_likes = random.randint(0, 10)  # Генерируем случайное количество лайков для данного поста
+        num_likes = random.randint(0, 10)
 
         for _ in range(num_likes):
             like = Like()
             like.post = post
             like.user = random.choice(users)
             like.save()
-    print("Фейк лайки успешно созданы.")
+    print("Fake likes successfully created.")
 
 
 if __name__ == '__main__':
