@@ -52,7 +52,6 @@ class SomeoneProfileView(LoginRequiredMixin, DetailView):
     context_object_name = 'other_user'
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
-        print('blabla')
         context = super().get_context_data(**kwargs)
         posts = PostRepository.get_posts_by_author(self.object)
         context['posts'] = posts
