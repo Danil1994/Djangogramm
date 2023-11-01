@@ -42,9 +42,12 @@ USER appuser
 # Copy the source code into the container.
 COPY . .
 
+# Copy media and templates folders
+COPY media/ /app/media/
+COPY templates/ /app/templates/
+
 # Expose the port that the application listens on.
 EXPOSE 8000
 
 # Run the application.
-CMD python manage.py runserver
-
+CMD gunicorn 'djangogramm.wsgi' --bind=0.0.0.0:8000
