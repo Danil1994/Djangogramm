@@ -6,6 +6,21 @@ from django.urls import reverse
 from main_app.helping_func import avatar_file_path, photo_file_path
 
 
+# class User(Base):
+#     __tablename__ = "user_account"
+#
+#     id: Mapped[int] = mapped_column(primary_key=True)
+#     name: Mapped[str] = mapped_column(String(30))
+#     fullname: Mapped[Optional[str]]
+#
+#     addresses: Mapped[List["Address"]] = relationship(
+#         back_populates="user", cascade="all, delete-orphan"
+#     )
+#
+#     def __repr__(self) -> str:
+#         return f"User(id={self.id!r}, name={self.name!r}, fullname={self.fullname!r})"
+
+
 # Photo model representing uploaded images
 class Photo(models.Model):
     image = models.ImageField(upload_to=photo_file_path, blank=True, null=True)
@@ -44,7 +59,7 @@ class CustomUser(AbstractUser):
 # Post model representing individual posts
 class Post(models.Model):
     # CharField for the name of the post
-    name = models.CharField(max_length=40)
+    name = models.CharField(max_length=50)
     # TextField for the summary/description of the post
     summary = models.TextField(max_length=1000, help_text="Enter description of the post")
     # ForeignKey to the CustomUser model representing the author of the post

@@ -8,23 +8,38 @@
 # database or a cache. For examples, see the Awesome Compose repository:
 # https://github.com/docker/awesome-compose
 services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: task_12_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 12345678
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
   django:
-    # Сборка образа для сервиса django из текущей директории
     build: .
-    # Задание имени контейнера для сервиса django
     container_name: django
-    # Задание команды, которую нужно запустить при запуске контейнера для сервиса django
-    command: python manage.py runserver 0.0.0.0:8000
+    command: >
+      bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     volumes:
       - /app
-    # Открытие порта на хостовой машине и перенаправление на порт в контейнере
     ports:
       - 8000:8000
-#  server:
-#    build:
-#      context: .
-#    ports:
-#      - 8000:8000
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=task_12_db
+      - DB_USER=postgres
+      - DB_PASSWORD=12345678
+
+volumes:
+  postgres_data:  # Docker volume для сохранения данных PostgreSQL
+
 
 # The commented out section below is an example of how to define a PostgreSQL
 # database that your application can use. `depends_on` tells Docker Compose to

@@ -50,7 +50,7 @@ def create_fake_posts(num_posts: int = 10) -> None:
 
     for _ in range(num_posts):
         post = Post()
-        post.name = fake.sentence(nb_words=6)
+        post.name = fake.word()
         post.summary = fake.paragraph(nb_sentences=5)
         post.author = random.choice(users)
         post.publish_date = fake.date_between(start_date='-1y', end_date='today')
