@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="explore">
+    <h1>Welcome to DjangoGramm!</h1>
+    <p>
+        DjangoGramm is the perfect place to share photos and create amazing moments. Here you can share yours
+        memories, upload photos and enjoy beautiful images from other users.
+    </p>
+    <p>
+        Create your profile, view photos of other users and leave comments.
+        DjangoGramm offers many options for your creative and photographic direction.
+    </p>
+    <p>
+        Enjoy the development of the world and share it with the DjangoGramm community. Join us today!
+    </p>
+    <p>
+        <a href="{% url 'index' %}">Go to photos</a>
+    </p>
+</div>
+{% endblock %}

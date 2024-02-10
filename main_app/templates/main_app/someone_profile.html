@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<main class="profile-page">
+    <div class="profile-info">
+        <div class="profile-avatar">
+            <img src="{{ user.avatar.url }}" alt="User Avatar" width="300" height="200">
+        </div>
+        <div class="profile-details">
+            <h1>User {{ other_user.get_username }}</h1>
+            <p>Bio: {{ other_user.bio }}</p>
+        </div>
+    </div>
+
+<div class="subscribe">
+    <form id="subscribe-form" method="post" action="{% url 'subscribe' pk=other_user.pk %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="button" class="button comment-button subscribe-button">
+            {% if subscribe %}Unsubscribe{% else %}Subscribe{% endif %}
+        </button>
+    </form>
+</div>
+
+
+
+    <div class="profile-posts">
+        <h2>Посты пользователя:</h2>
+        <ul>
+            {% for post in posts %}
+            <li><a href="{{ post.get_absolute_url }}">{{post.name}}</a></li>
+            {% empty %}
+            <li>У этого пользователя нет постов.</li>
+            {% endfor %}
+        </ul>
+    </div>
+</main>
+{% endblock %}

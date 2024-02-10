@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="create-post">
+    <form method="post" enctype="multipart/form-data">
+        <div class=" post-name">
+            {% csrf_token %}
+            {{ post_form.as_p }}
+        </div>
+        <div class="tag">
+            {{ tag_form.tag.label_tag }}
+            {{ tag_form.tag }}
+        </div>
+        <div class="photo">
+            {{ photo_formset.management_form }}
+            {% for photo_form in photo_formset %}
+            {{ photo_form.as_p }}
+            {% endfor %}
+        </div>
+        <button type="submit">Create Post</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,84 @@
+html {
+    font-size: 16px;
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+}
+
+body {
+    background-color: #f5f5f5;
+    font-family: 'Roboto', sans-serif;
+    margin: 0px;
+    padding: 0;
+}
+
+.container {
+    margin: 20px;
+}
+
+a {
+    color: #000;
+    text-decoration: underline;
+}
+
+a:hover {
+    color: #0056b3;
+    text-decoration: none;
+}
+
+.post-with-photo {
+    padding: 20px;
+    border: 2px shadow black;
+}
+
+/* post detail */
+
+.post-photos img {
+    max-width: 250px;
+    height: 250px;
+    object-fit: cover;
+    margin: 5px;
+}
+
+.post .like-container {
+    display: flex;
+}
+/* post detail */
+
+/* explore */
+.explore a {
+    color: #000;
+    text-decoration: underline;
+    transition: color 0.3s;
+}
+
+.explore a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+/* explore */
+
+/* self-profile */
+
+.profile-info .profile-avatar img {
+    border: 5px solid black;
+}
+
+.profile-details {
+    padding: 10px;
+}
+/* self-profile */
+
+/* create post */
+.create-post {
+    margin: 30px;
+}
+
+.tag {
+    padding: 20px;
+}
+/* create post */

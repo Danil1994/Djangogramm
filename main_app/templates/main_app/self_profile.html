@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="profile-info">
+
+        <div class="profile-avatar">
+            <img src="{{ user.avatar.url }}" alt="User Avatar" width="300" height="200">
+        </div>
+
+        <div class="profile-details">
+            <h1>User: {{ user.get_username }}</h1>
+            <p>Bio: {{ user.bio }}</p>
+             <i class="fa-solid fa-user-pen"></i> <a href="{% url 'edit_profile' %} ">edit profile</a>
+        </div>
+
+    </div>
+
+    <div class="profile-posts">
+        <h2>User`s posts:</h2>
+        <ul>
+            {% for post in posts %}
+            <li><a href="{{ post.get_absolute_url }}">{{post.name}}</a></li>
+            {% empty %}
+            <li>У вас нет постов.</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+{% endblock %}

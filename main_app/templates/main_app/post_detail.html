@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="post">
+    <h2>{{ post.name }}</h2>
+    <div class="post-meta">
+        <p class="author-and-pub-date"><i>Author: <a href="{{ post.author.get_absolute_url }}">{{ post.author }}</a>,
+            pub_date: {{ post.publish_date }}</i></p>
+    </div>
+
+
+    <div class="post-photos">
+        {% for photo in photos %}
+        <img src="{{ photo.image.url }}" alt="Photo">
+        {% endfor %}
+    </div>
+
+
+    <div class="post-tags">
+        <p>Теги: {% for tag in tags %}
+            {{ tag.tag }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}</p>
+
+    </div>
+    <div class="post-summary">
+        <p>{{post.summary}}</p>
+    </div>
+
+    <div class="like-container row row-cols-auto">
+
+        <div class="like-section col-auto">
+            <button type="button" class="like-button" data-post-id="{{ post.id }}">
+                <p><i class="fa-solid fa-thumbs-up"></i> <span
+                        id="likes-count-{{ post.id }}">{{ post.likes.all.count }}</span></p>
+            </button>
+        </div>
+
+        <div class="dislike-section col-auto">
+            <button type="button" class="dislike-button" data-post-id="{{ post.id }}">
+                <p><i class="fa-solid fa-thumbs-down"></i> <span id="dislikes-count-{{ post.id }}">{{ post.dislikes.all.count }}</span>
+                </p>
+            </button>
+        </div>
+    </div>
+
+    <div class="comments">
+
+        <h3>Comments</h3>
+        <form method="post" action="{% url 'add_comment_to_post' post.pk %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="button comment-button">Write comment</button>
+        </form>
+
+        <div class="existing-comments">
+            {% for comment in comments %}
+            <div class="comment-frame">
+                <p class="comment-author"><strong>{{ comment.author }}</strong></p>
+                <p class="comment-text">{{ comment.text }}</p>
+                <p class="comment-date">{{ comment.publish_date }}</p>
+            </div>
+            {% empty %}
+            <p>No one comment here.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
