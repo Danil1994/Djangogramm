@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 
-{% load socialaccount %}
 {% block content %}
 
 {% if form.errors %}
@@ -38,11 +37,8 @@
     {% endif %}
   {% endif %}
 
-<button class="btn btn-outline-info">
-        <a href="{% provider_login_url 'google'%}?next=/">
-            <i class="fab fa-google"></i>
-            Login with Google
-        </a>
-    </button>
+<a href="{% url 'social:begin' 'google-oauth2' %}">Google+</a>
+<a href="{% url 'social:begin' 'github' %}">Войти через GitHub</a>
+
 
 {% endblock %}

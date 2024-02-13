@@ -31,8 +31,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'cg#p$g+j9tax!#a3cup@1$8obt2_+&
 # DEBUG = bool(os.environ.get('DEBUG'))
 DEBUG = True
 
-ALLOWED_HOSTS = ['testserver', '127.0.0.1', 'localhost']
-SITE_ID = 1
+ALLOWED_HOSTS = ['testserver', '127.0.0.1', 'localhost', 'www.example.com']
 
 # Application definition
 
@@ -46,14 +45,10 @@ INSTALLED_APPS = [
     'main_app.apps.MainAppConfig',
     'storages',
 
-    'django.contrib.sites',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
+    'social_django',
 ]
 
-SOCIALACCOUNT_LOGIN_ON_GET = True
+SOCIAL_AUTH_JSONFIELD_ENABLED = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -63,8 +58,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
-    'allauth.account.middleware.AccountMiddleware'
 ]
 
 ROOT_URLCONF = 'djangogramm.urls'
@@ -80,6 +73,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -121,23 +117,15 @@ DATABASES = {
 # ]
 
 AUTHENTICATION_BACKENDS = [
+    'social_core.backends.open_id.OpenIdAuth',
+    'social_core.backends.google.GoogleOAuth2',
+    'social_core.backends.google.GoogleOAuth',
+    'social_core.backends.github.GithubOAuth2',
+
     'django.contrib.auth.backends.ModelBackend',
     'djangogramm.auth_backends.CustomEmailBackend',
-
-    'allauth.account.auth_backends.AuthenticationBackend'
 ]
-
-SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'SCOPE': [
-            'profile',
-            'email',
-        ],
-        'AUTH_PARAMS': {
-            'access_type': 'online',
-        }
-    }
-}
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
@@ -176,5 +164,15 @@ AUTH_USER_MODEL = "main_app.CustomUser"
 
 DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
 GS_BUCKET_NAME = 'bucket-quickstart_djangogramm-399608'
-credential_path = 'C:/Users/38067/PycharmProjects/foxmind/task_13/credentials.json'
+credential_path = 'C:/Users/38067/PycharmProjects/foxmind/task_15/credentials.json'
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credential_path
+
+os.getenv('DB_NAME'),
+
+# Client ID для OAuth
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
+# Client Secret для OAuth
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
+
+SOCIAL_AUTH_GITHUB_KEY = os.getenv('SOCIAL_AUTH_GITHUB_KEY')
+SOCIAL_AUTH_GITHUB_SECRET = os.getenv('SOCIAL_AUTH_GITHUB_SECRET')

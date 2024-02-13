@@ -30,18 +30,14 @@ urlpatterns = [
 urlpatterns += [
     path('', RedirectView.as_view(url='/main_app/', permanent=True)),
     path('main_app/', include('main_app.urls')),
-    path('', include('allauth.urls')),  # most important
-    path('accounts/', include('allauth.urls')),
+
     # Подключение кастомной формы входа (EmailAuthenticationForm)
     path('accounts/login/', LoginView.as_view(authentication_form=EmailAuthenticationForm), name='login'),
+    # Включение стандартных URL-шаблонов аутентификации Django
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('', include('social_django.urls', namespace='social')),
 
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-urlpatterns += [
-    # Включение стандартных URL-шаблонов аутентификации Django
-    # path('accounts/', include('django.contrib.auth.urls')),
-
-]
