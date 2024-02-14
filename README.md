@@ -1,6 +1,6 @@
 # Djangogramm
 
-An application similar to Instagram, which we named DjangoGramm. This application has a web interface and offers the
+An application similar to Instagram, which we named Djangogramm. This application has a web interface and offers the
 following functionalities:
 
 Registration and Confirmation;
@@ -19,10 +19,11 @@ link to UML-diagrams
   --Clone with HTTPS `git clone git@github.com:Danil1994/Djangogramm.git`
 
 2. Go to your project folder: `path/to/the/Djangogramm`
-3. Load your .env file.
+3. Load your .env file like .env.example. And provide all the required information (passwords, secret keys etc).
 4. Install requirements.txt: `pip install -r requirements.txt`
-5. Сreate a database and configure connection parameters
-6. Make migrate:  `python manage.py migrate`
+5. Create a database and configure connection parameters
+6. Connect your cloud storage for your app`s photo.
+7. Make migrate:  `python manage.py migrate`
 
 ## Run
 
@@ -59,7 +60,7 @@ drop your DB you don`t delete this photo. So if you wont to do it you must clean
 They are created superuser. With next parameters:
 --username: admin
 --email: one12@mail.com
---password: 1234
+--password: 1111
 Enter it to access the admin panel.
 
 ## Help to develop
