@@ -167,8 +167,6 @@ GS_BUCKET_NAME = 'bucket-quickstart_djangogramm-399608'
 credential_path = 'C:/Users/38067/PycharmProjects/foxmind/task_15/credentials.json'
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credential_path
 
-os.getenv('DB_NAME'),
-
 # Client ID для OAuth
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
 # Client Secret для OAuth

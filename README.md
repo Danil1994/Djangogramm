@@ -20,6 +20,7 @@ link to UML-diagrams
 
 2. Go to your project folder: `path/to/the/Djangogramm`
 3. Load your .env file like .env.example. And provide all the required information (passwords, secret keys etc).
+4. Activate your virtual env
 4. Install requirements.txt: `pip install -r requirements.txt`
 5. Create a database and configure connection parameters
 6. Connect your cloud storage for your app`s photo.
