@@ -1,7 +1,6 @@
-from django.test import TestCase
-from django.test import RequestFactory
+from django.test import RequestFactory, TestCase
 
-from main_app.models import Post, CustomUser
+from main_app.models import CustomUser, Post
 from main_app.repositories import LikeRepository
 
 
