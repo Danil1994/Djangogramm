@@ -102,6 +102,6 @@ def create_fake_comments() -> None:
 if __name__ == '__main__':
     create_fake_users()
     create_fake_tags()
-    create_fake_posts()
+    create_fake_posts(100)
     create_fake_photos()
     create_fake_comments()
