@@ -1,11 +1,8 @@
 import uuid
-import os
 from pathlib import Path
 from typing import Any
 
 from django.utils.text import slugify
-
-PATH_TO_BUCKET_FOLDER = os.getenv('PATH_TO_BUCKET_FOLDER')
 
 
 def photo_file_path(instance: Any, filename: str) -> Path:
@@ -22,7 +19,7 @@ def photo_file_path(instance: Any, filename: str) -> Path:
     author_slug: str = slugify(instance.post.author.username)
     post_name_slug: str = slugify(instance.post.name)
     unique_filename: str = f"{author_slug}--{post_name_slug}--{uuid.uuid4()}--{Path(filename).suffix}"
-    return Path(f"{PATH_TO_BUCKET_FOLDER}photos/{unique_filename}")
+    return Path(f"media/photos/{unique_filename}")
 
 
 def avatar_file_path(instance: object, filename: str) -> Path:
@@ -38,4 +35,4 @@ def avatar_file_path(instance: object, filename: str) -> Path:
     """
     username_slug: str = slugify(instance.username)
     unique_filename: str = f"{username_slug}--{uuid.uuid4()}--{Path(filename).suffix}"
-    return Path(f"{PATH_TO_BUCKET_FOLDER}avatars/") / unique_filename
+    return Path(f"media/avatars/{unique_filename}")

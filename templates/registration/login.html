@@ -37,8 +37,8 @@
     {% endif %}
   {% endif %}
 
-<a href="{% url 'social:begin' 'google-oauth2' %}">Google+</a>
-<a href="{% url 'social:begin' 'github' %}">Войти через GitHub</a>
+<a href="{% url 'social:begin' 'google-oauth2' %}" class="google-signin-button">Login via Google</a>
+<a href="{% url 'social:begin' 'github' %}" class="github-login">Login via GitHub</a>
 
 
 {% endblock %}
