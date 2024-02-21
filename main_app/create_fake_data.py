@@ -53,6 +53,7 @@ def create_fake_posts(num_posts: int = 10) -> None:
         post.name = fake.word()
         post.summary = fake.paragraph(nb_sentences=5)
         post.author = random.choice(users)
+
         post.publish_date = fake.date_between(start_date='-1y', end_date='today')
         post.save()
         post.tag.set(random.sample(list(tags), random.randint(1, 3)))

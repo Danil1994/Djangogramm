@@ -30,10 +30,9 @@ urlpatterns = [
 urlpatterns += [
     path('', RedirectView.as_view(url='/main_app/', permanent=True)),
     path('main_app/', include('main_app.urls')),
-
-    # Подключение кастомной формы входа (EmailAuthenticationForm)
+    # including custom form login (EmailAuthenticationForm)
     path('accounts/login/', LoginView.as_view(authentication_form=EmailAuthenticationForm), name='login'),
-    # Включение стандартных URL-шаблонов аутентификации Django
+    # Basic URLs
     path('accounts/', include('django.contrib.auth.urls')),
     path('', include('social_django.urls', namespace='social')),
 

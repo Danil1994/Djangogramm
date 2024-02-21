@@ -30,7 +30,7 @@
 <header>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">DjangograM</a>
+            <a class="navbar-brand" href="{% url 'index' %}">DjangograM</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent"
                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,7 +56,7 @@
                                 class="fa-solid fa-user"></i></a>
                         <ul class="dropdown-menu">
                             {% if user.is_authenticated %}
-                            <li><a class="dropdown-item">{{ user.get_username }}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'self_profile' %}">{{ user.get_username }}</a></li>
                             <li><a class="dropdown-item" href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>
                             {% else %}
                             <li><a href="{% url 'login' %}?next={{request.path}}">Login</a></li>
