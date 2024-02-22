@@ -42,10 +42,6 @@ USER appuser
 # Copy the source code into the container.
 COPY . .
 
-# Copy media and templates folders
-COPY media/ /app/media/
-COPY templates/ /app/templates/
-
 # Expose the port that the application listens on.
 EXPOSE 8000
 
